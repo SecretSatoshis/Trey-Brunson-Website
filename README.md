@@ -2,6 +2,14 @@
 
 Personal Website for [Trey Brunson](https://treybrunson.com/).
 
+## Contact
+
+Connect with [Trey Brunson on LinkedIn](https://www.linkedin.com/in/trey-brunson).
+
+## Background
+
+Trey Brunson is a Bitcoin industry professional with a decade of experience spanning exchange operations, institutional financial products, and crypto venture funds. He is the founder of [Secret Satoshis](https://secretsatoshis.com/), an open, verifiable, AI-native Bitcoin intelligence platform.
+
 ## Technology
 
 - Next.js 16 App Router
@@ -76,10 +84,6 @@ Trey-Brunson-Website/
 ├── pnpm-workspace.yaml
 └── README.md
 ```
-
-## Contact
-
-Connect with [Trey Brunson on LinkedIn](https://www.linkedin.com/in/trey-brunson).
 
 ## License
 
