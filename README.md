@@ -1,4 +1,4 @@
-# Trey Brunson
+# TreyBrunson.com
 
 Personal Website for [Trey Brunson](https://treybrunson.com/).
 
