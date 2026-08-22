@@ -152,7 +152,6 @@ export default function Home() {
         <h2>The future of Bitcoin is already here.<br /><em>It&apos;s just not evenly distributed.</em></h2>
         <div className="closing-links">
           <a className="button button-primary" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
-          <a className="button button-secondary" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Visit Secret Satoshis</a>
         </div>
       </section>
       </main>
