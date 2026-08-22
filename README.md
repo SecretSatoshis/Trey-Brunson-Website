@@ -6,6 +6,35 @@ Personal Website for [Trey Brunson](https://treybrunson.com/).
 
 Connect with [Trey Brunson on LinkedIn](https://www.linkedin.com/in/trey-brunson).
 
+## Project structure
+
+```text
+Trey-Brunson-Website/
+├── .github/
+│   ├── workflows/ci.yml
+│   └── dependabot.yml
+├── app/
+│   ├── api/bitcoin/route.ts
+│   ├── SupplyHeroModule.tsx
+│   ├── globals.css
+│   ├── layout.tsx
+│   ├── not-found.tsx
+│   ├── page.tsx
+│   ├── robots.ts
+│   └── sitemap.ts
+├── public/
+│   ├── favicon.png
+│   ├── og.png
+│   └── trey-headshot.webp
+├── LICENSE
+├── SECURITY.md
+├── next.config.ts
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+└── README.md
+```
+
 ## Background
 
 Trey Brunson is a Bitcoin industry professional with a decade of experience spanning exchange operations, institutional financial products, and crypto venture funds. He is the founder of [Secret Satoshis](https://secretsatoshis.com/), an open, verifiable, AI-native Bitcoin intelligence platform.
@@ -55,35 +84,6 @@ pnpm audit --prod
 ```
 
 GitHub Actions runs lint, type checking, and the production build on every pull request and every push to `main`.
-
-## Project structure
-
-```text
-Trey-Brunson-Website/
-├── .github/
-│   ├── workflows/ci.yml
-│   └── dependabot.yml
-├── app/
-│   ├── api/bitcoin/route.ts
-│   ├── SupplyHeroModule.tsx
-│   ├── globals.css
-│   ├── layout.tsx
-│   ├── not-found.tsx
-│   ├── page.tsx
-│   ├── robots.ts
-│   └── sitemap.ts
-├── public/
-│   ├── favicon.png
-│   ├── og.png
-│   └── trey-headshot.webp
-├── LICENSE
-├── SECURITY.md
-├── next.config.ts
-├── package.json
-├── pnpm-lock.yaml
-├── pnpm-workspace.yaml
-└── README.md
-```
 
 ## License
 
