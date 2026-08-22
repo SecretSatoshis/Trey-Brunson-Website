@@ -71,7 +71,6 @@ export default function Home() {
         <section className="hero" id="top">
         <div className="hero-grid" aria-hidden="true" />
         <div className="hero-inner">
-          <div className="hero-kicker reveal-item"><span className="status-dot" />Bitcoin industry · Since 2016</div>
           <h1 className="hero-title reveal-item">
             Focused on <em>Bitcoin</em> and its growing role in the world since 2016.
           </h1>
