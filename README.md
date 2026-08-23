@@ -4,7 +4,7 @@ Personal Website for [Trey Brunson](https://treybrunson.com/).
 
 ## Background
 
-Trey Brunson is a Bitcoin industry professional with a decade of experience spanning exchange operations, institutional financial products, and venture capital. He is the founder of [Secret Satoshis](https://secretsatoshis.com/), an open, verifiable, AI-native Bitcoin market intelligence platform.
+Trey Brunson is a Bitcoin industry professional with a decade of experience spanning crypto exchange operations, financial products, and venture capital. He is the founder of [Secret Satoshis](https://secretsatoshis.com/), an open, verifiable, AI-native Bitcoin market intelligence platform.
 
 ## Contact
 
