@@ -5,7 +5,7 @@ const ventures = [
   {
     index: '01',
     title: 'Secret Satoshis',
-    label: 'AI-native Bitcoin market intelligence',
+    label: 'Bitcoin intelligence you can verify',
     description:
       'An AI-native Bitcoin market intelligence platform built on open data, original analysis, and more than a decade inside Bitcoin markets.',
     href: 'https://secretsatoshis.com/',
