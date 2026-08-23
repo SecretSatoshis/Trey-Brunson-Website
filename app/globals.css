@@ -224,9 +224,9 @@ a { color: inherit; text-decoration: none; }
 .work .eyebrow, .work .venture-index { color: var(--orange); }
 .light-label { color: #8b8982; }
 .light-label span { border-color: #3c3b37; color: var(--orange); }
-.work-intro { display: grid; grid-template-columns: .75fr 1.55fr .7fr; gap: 60px; align-items: end; }
+.work-intro { display: grid; grid-template-columns: 1.55fr .7fr; gap: 60px; align-items: end; }
 .work-intro h2 { max-width: 720px; font-size: clamp(44px,5.7vw,82px); }
-.work-intro > p:last-child { margin: 0 0 6px; color: #a6a39b; font-size: 14px; line-height: 1.65; }
+.work-intro > p:last-child { max-width: 310px; margin: 0 0 6px; color: #a6a39b; font-size: 14px; line-height: 1.65; }
 .venture-list { margin-top: clamp(78px,9vw,132px); border-top: 1px solid #34332f; }
 .venture-card {
   display: grid;
@@ -306,7 +306,7 @@ a { color: inherit; text-decoration: none; }
   .about-grid { gap: 52px; }
   .portrait-wrap { width: min(100%, 620px); }
   .about-copy { padding-top: 0; }
-  .work-intro { grid-template-columns: 1fr 2fr; }
+  .work-intro { grid-template-columns: 1.6fr .8fr; }
   .work-intro > p:last-child { grid-column: 2; }
   .venture-card { grid-template-columns: .16fr .85fr 1fr; }
   .venture-link { display: none; }

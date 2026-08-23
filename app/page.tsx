@@ -112,8 +112,7 @@ export default function Home() {
       <section className="work section-shell" id="work">
         <div className="section-label light-label"><span>02</span>Selected work</div>
         <div className="work-intro">
-          <p className="eyebrow">Platforms &amp; projects</p>
-          <h2>Making Bitcoin easier to understand.</h2>
+          <h2>Platforms &amp; projects</h2>
           <p>Research, tools, and open frameworks designed to make Bitcoin more approachable, accessible, and useful.</p>
         </div>
         <div className="venture-list">
