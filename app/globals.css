@@ -224,9 +224,9 @@ a { color: inherit; text-decoration: none; }
 .work .eyebrow, .work .venture-index { color: var(--orange); }
 .light-label { color: #8b8982; }
 .light-label span { border-color: #3c3b37; color: var(--orange); }
-.work-intro { display: grid; grid-template-columns: 1.55fr .7fr; gap: 60px; align-items: end; }
+.work-intro { display: grid; gap: 26px; }
 .work-intro h2 { max-width: 720px; font-size: clamp(44px,5.7vw,82px); }
-.work-intro > p:last-child { max-width: 310px; margin: 0 0 6px; color: #a6a39b; font-size: 14px; line-height: 1.65; }
+.work-intro > p:last-child { max-width: 560px; margin: 0; color: #a6a39b; font-size: 17px; line-height: 1.6; }
 .venture-list { margin-top: clamp(78px,9vw,132px); border-top: 1px solid #34332f; }
 .venture-card {
   display: grid;
@@ -306,8 +306,6 @@ a { color: inherit; text-decoration: none; }
   .about-grid { gap: 52px; }
   .portrait-wrap { width: min(100%, 620px); }
   .about-copy { padding-top: 0; }
-  .work-intro { grid-template-columns: 1.6fr .8fr; }
-  .work-intro > p:last-child { grid-column: 2; }
   .venture-card { grid-template-columns: .16fr .85fr 1fr; }
   .venture-link { display: none; }
 }
@@ -318,7 +316,7 @@ a { color: inherit; text-decoration: none; }
   .header-links { gap: 16px; font-size: 10px; }
   .hero { min-height: auto; padding-top: 66px; }
   .hero-title { margin-top: 44px; font-size: clamp(52px,15.5vw,82px); line-height: .92; }
-  .hero-bottom, .perspective-lead, .work-intro, .about-grid { grid-template-columns: 1fr; }
+  .hero-bottom, .perspective-lead, .about-grid { grid-template-columns: 1fr; }
   .hero-bottom { gap: 28px; align-items: start; margin-top: 48px; }
   .hero-actions .button { flex: 1; }
   .hero-supply-module { width: min(100%, 350px); margin-top: 48px; }
@@ -331,8 +329,6 @@ a { color: inherit; text-decoration: none; }
   .principles { grid-template-columns: 1fr; }
   .principle { min-height: 220px; }
   .principle h3 { margin-top: 48px; }
-  .work-intro { gap: 26px; }
-  .work-intro > p:last-child { grid-column: auto; }
   .venture-card { grid-template-columns: 42px 1fr; gap: 8px 18px; padding: 28px 0; }
   .venture-card:hover { padding: 28px 14px; }
   .venture-description { grid-column: 2; }
