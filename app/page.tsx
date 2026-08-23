@@ -75,7 +75,7 @@ export default function Home() {
             Focused on <em>Bitcoin</em> and its growing role in the world since 2016.
           </h1>
           <div className="hero-bottom reveal-item">
-            <p>Trey Brunson is a professional in the Bitcoin industry with a decade of experience spanning exchange operations, institutional financial products, and venture capital.</p>
+            <p>Trey Brunson is a professional in the Bitcoin industry with a decade of experience spanning crypto exchange operations, financial products, and venture capital.</p>
             <div className="hero-actions">
               <a className="button button-primary" href="#work">Explore the work <span aria-hidden="true">↓</span></a>
               <a className="button button-secondary" href="#about">About Trey</a>
@@ -138,7 +138,7 @@ export default function Home() {
           <div className="about-copy">
             <p className="eyebrow">About Trey</p>
             <h2>A decade working across the Bitcoin industry.</h2>
-            <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware turned into a decade-long career across the industry—from crypto exchange operations and institutional financial products to working at a crypto venture fund.</p>
+            <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware turned into a decade-long career across the industry—from crypto exchange operations and financial products to working at a crypto venture fund.</p>
             <p>Along the way, he has been fortunate to work at some of the biggest companies in the space, including Blockchain.com, Binance.US, 21Shares, and Tribe Capital. This site is a place to share what he has learned and help friends, family, and anyone trying to make sense of a complex, fast-moving industry.</p>
             <p>Today, that work is centered on <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>—an open, verifiable, AI-native Bitcoin market intelligence platform. The goal is simple: use open-source research and accessible AI tools to make Bitcoin easier to understand, easier to access, and easier for people to explore on their own terms.</p>
             <a className="text-link" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">View LinkedIn <span aria-hidden="true">↗</span></a>
