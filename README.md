@@ -28,7 +28,7 @@ Trey-Brunson-Website/
 │   └── sitemap.ts
 ├── public/
 │   ├── favicon.png
-│   ├── og.png
+│   ├── og.jpg
 │   └── trey-headshot.webp
 ├── LICENSE
 ├── SECURITY.md
@@ -36,6 +36,7 @@ Trey-Brunson-Website/
 ├── package.json
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
+├── proxy.ts             # Per-request Content Security Policy and script nonce
 └── README.md
 ```
 

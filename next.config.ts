@@ -1,18 +1,11 @@
 import type { NextConfig } from 'next';
 
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "connect-src 'self'",
-  "font-src 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-  "img-src 'self' data: blob:",
-  "object-src 'none'",
-  "script-src 'self' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline'",
-  'upgrade-insecure-requests',
-].join('; ');
+/*
+ * Content-Security-Policy is set in middleware.ts, not here: it carries a per-request
+ * nonce so the JSON-LD block in app/layout.tsx can run without `script-src
+ * 'unsafe-inline'`. Setting it in both places would emit two CSP headers, and browsers
+ * enforce the intersection — which would block the nonced script.
+ */
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -25,7 +18,6 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: [
-          { key: 'Content-Security-Policy', value: contentSecurityPolicy },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'X-Frame-Options', value: 'DENY' },

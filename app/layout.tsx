@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { headers } from 'next/headers';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: [
       {
-        url: '/og.png',
+        url: '/og.jpg',
         width: 1200,
         height: 630,
         alt: 'Trey Brunson — Focused on Bitcoin since 2016.',
@@ -62,7 +63,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Trey Brunson — Focused on Bitcoin Since 2016',
     description: SITE_DESCRIPTION,
-    images: ['/og.png'],
+    images: ['/og.jpg'],
   },
   category: 'technology',
 };
@@ -102,11 +103,15 @@ const structuredData = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Minted per request by proxy.ts. Without it the JSON-LD block below would
+  // require `script-src 'unsafe-inline'`, which would let any injected script run too.
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
+
   return (
     <html lang="en">
       <body
@@ -114,6 +119,7 @@ export default function RootLayout({
       >
         <script
           type="application/ld+json"
+          nonce={nonce}
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(structuredData).replace(/</g, '\\u003c'),
           }}
