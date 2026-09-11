@@ -22,18 +22,19 @@ import type { NextRequest } from 'next/server';
 export default function proxy(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
+  const isDevelopment = process.env.NODE_ENV === 'development';
   const csp = [
     "default-src 'self'",
     "base-uri 'self'",
-    "connect-src 'self'",
+    `connect-src 'self'${isDevelopment ? " ws: wss:" : ""}`,
     "font-src 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
     "img-src 'self' data: blob:",
     "object-src 'none'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDevelopment ? " 'unsafe-eval'" : ''}`,
     "style-src 'self' 'unsafe-inline'",
-    'upgrade-insecure-requests',
+    ...(isDevelopment ? [] : ['upgrade-insecure-requests']),
   ].join('; ');
 
   // Forwarded so the server components rendering this request can read the nonce.

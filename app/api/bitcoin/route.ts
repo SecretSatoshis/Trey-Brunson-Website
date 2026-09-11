@@ -2,6 +2,7 @@ const MEMPOOL_API = 'https://mempool.space/api';
 
 type MempoolPrices = {
   USD?: unknown;
+  time?: unknown;
 };
 
 export const dynamic = 'force-dynamic';
@@ -13,7 +14,7 @@ export async function GET() {
   try {
     const requestOptions = {
       headers: { Accept: 'application/json' },
-      next: { revalidate: 60 },
+      cache: 'no-store' as const,
       signal: controller.signal,
     };
     const [heightResponse, priceResponse] = await Promise.all([
@@ -28,6 +29,8 @@ export async function GET() {
     const blockHeight = Number(await heightResponse.text());
     const prices = (await priceResponse.json()) as MempoolPrices;
     const priceUsd = prices.USD;
+    const priceUpdatedAt = prices.time;
+    const fetchedAt = Math.floor(Date.now() / 1000);
 
     if (
       !Number.isInteger(blockHeight)
@@ -35,12 +38,16 @@ export async function GET() {
       || typeof priceUsd !== 'number'
       || !Number.isFinite(priceUsd)
       || priceUsd <= 0
+      || typeof priceUpdatedAt !== 'number'
+      || !Number.isInteger(priceUpdatedAt)
+      || priceUpdatedAt <= 0
+      || priceUpdatedAt > fetchedAt + 60
     ) {
       throw new Error('Upstream Bitcoin data response was invalid');
     }
 
     return Response.json(
-      { blockHeight, priceUsd },
+      { blockHeight, priceUsd, priceUpdatedAt, fetchedAt },
       {
         headers: {
           'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',

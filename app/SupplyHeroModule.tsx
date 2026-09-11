@@ -37,52 +37,68 @@ function formatUsd(value: number | null) {
 export default function SupplyHeroModule() {
   const [blockHeight, setBlockHeight] = useState<number | null>(null);
   const [priceUsd, setPriceUsd] = useState<number | null>(null);
-  const [isSupplyLive, setIsSupplyLive] = useState(false);
-  const [isPriceLive, setIsPriceLive] = useState(false);
+  const [priceUpdatedAt, setPriceUpdatedAt] = useState<number | null>(null);
+  const [fetchedAt, setFetchedAt] = useState<number | null>(null);
+  const [now, setNow] = useState(0);
   const [hasAttemptedUpdate, setHasAttemptedUpdate] = useState(false);
+  const [requestFailed, setRequestFailed] = useState(false);
 
   useEffect(() => {
-    const controller = new AbortController();
+    let disposed = false;
+    let refresh: ReturnType<typeof setTimeout>;
+    let controller: AbortController | undefined;
+    const clock = window.setInterval(() => setNow(Date.now() / 1000), 30_000);
 
-    async function updateMarketData() {
-      const response = await fetch('/api/bitcoin', {
-        cache: 'no-store',
-        signal: controller.signal,
-      });
-
-      if (!response.ok) throw new Error('Bitcoin market data is unavailable');
-
-      const data = (await response.json()) as {
-        blockHeight?: number;
-        priceUsd?: number;
-      };
-      const receivedLiveHeight = Number.isInteger(data.blockHeight) && (data.blockHeight ?? 0) > 0;
-      const receivedLivePrice = typeof data.priceUsd === 'number' && data.priceUsd > 0;
-
-      if (receivedLiveHeight) setBlockHeight(data.blockHeight ?? null);
-      if (receivedLivePrice) setPriceUsd(data.priceUsd ?? null);
-
-      setIsSupplyLive(receivedLiveHeight);
-      setIsPriceLive(receivedLivePrice);
-      setHasAttemptedUpdate(true);
+    async function refreshMarketData() {
+      controller = new AbortController();
+      const signal = controller.signal;
+      const deadline = window.setTimeout(() => controller?.abort(), 10_000);
+      try {
+        const response = await fetch('/api/bitcoin', { cache: 'no-store', signal });
+        if (!response.ok) throw new Error('Bitcoin market data is unavailable');
+        const data = await response.json();
+        const receivedAt = Date.now() / 1000;
+        if (!Number.isInteger(data.blockHeight) || data.blockHeight <= 0
+            || !Number.isFinite(data.priceUsd) || data.priceUsd <= 0
+            || !Number.isInteger(data.priceUpdatedAt) || data.priceUpdatedAt <= 0
+            || !Number.isInteger(data.fetchedAt) || data.fetchedAt <= 0
+            || data.priceUpdatedAt > data.fetchedAt + 60
+            || data.fetchedAt > receivedAt + 60) {
+          throw new Error('Invalid Bitcoin market data');
+        }
+        if (disposed) return;
+        if (signal.aborted) throw new Error('Bitcoin market data request timed out');
+        setBlockHeight(data.blockHeight);
+        setPriceUsd(data.priceUsd);
+        setPriceUpdatedAt(data.priceUpdatedAt);
+        setFetchedAt(data.fetchedAt);
+        setRequestFailed(false);
+      } catch {
+        if (!disposed) setRequestFailed(true);
+      } finally {
+        window.clearTimeout(deadline);
+        if (!disposed) {
+          setNow(Date.now() / 1000);
+          setHasAttemptedUpdate(true);
+          // Schedule after completion so slow responses cannot overlap newer requests.
+          refresh = setTimeout(() => { void refreshMarketData(); }, 60_000);
+        }
+      }
     }
 
-    const refreshMarketData = () => {
-      void updateMarketData().catch(() => {
-        setIsSupplyLive(false);
-        setIsPriceLive(false);
-        setHasAttemptedUpdate(true);
-      });
-    };
-
-    refreshMarketData();
-    const refresh = window.setInterval(refreshMarketData, 60_000);
-
+    void refreshMarketData();
     return () => {
-      controller.abort();
-      window.clearInterval(refresh);
+      disposed = true;
+      controller?.abort();
+      clearTimeout(refresh);
+      window.clearInterval(clock);
     };
   }, []);
+
+  // Prices update less often than our network-height requests. Expire both labels
+  // even when the connection fails or no further response arrives.
+  const isPriceLive = !requestFailed && priceUpdatedAt !== null && now - priceUpdatedAt <= 15 * 60;
+  const isSupplyLive = !requestFailed && fetchedAt !== null && now - fetchedAt <= 5 * 60;
 
   const issued = useMemo(
     () => (blockHeight === null ? null : issuedSupplyAtHeight(blockHeight)),
@@ -117,7 +133,7 @@ export default function SupplyHeroModule() {
     <aside
       className="hero-supply-module"
       aria-busy={!hasAttemptedUpdate}
-      aria-label="Live Bitcoin market and supply data"
+      aria-label="Bitcoin market and supply data"
     >
       <div className="metric-module-group">
         <div className="metric-module-head">
@@ -148,6 +164,9 @@ export default function SupplyHeroModule() {
           <small>USD</small>
         </div>
       </div>
+      {priceUpdatedAt !== null && (
+        <small>Price as of {new Date(priceUpdatedAt * 1000).toISOString().replace('T', ' ').replace('.000Z', ' UTC')}</small>
+      )}
     </aside>
   );
 }
