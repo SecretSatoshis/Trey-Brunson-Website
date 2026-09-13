@@ -6,7 +6,7 @@ import './globals.css';
 const SITE_URL = 'https://treybrunson.com';
 const SITE_TITLE = 'Trey Brunson — Bitcoin Industry Professional';
 const SITE_DESCRIPTION =
-  'Trey Brunson is a Bitcoin industry professional focused on making Bitcoin easier to understand and access.';
+  'Trey Brunson is a Bitcoin industry professional focused on making Bitcoin research easier to understand and explore.';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

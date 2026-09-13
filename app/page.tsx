@@ -16,7 +16,7 @@ const ventures = [
     title: 'Agent 21',
     label: 'Bitcoin AI agent',
     description:
-      'The AI-native interface to the Secret Satoshis research, built on live on-chain data and current Bitcoin network state.',
+      'An AI research assistant for exploring Secret Satoshis research and Bitcoin data.',
     href: 'https://chatgpt.com/g/g-BZXtVdU6M-agent-21',
     cta: 'Meet Agent 21',
   },
@@ -40,7 +40,7 @@ const principles = [
   {
     number: '02',
     title: 'Stay close to the foundation',
-    text: 'The clearest understanding comes from operating at the core of where users, investors, and institutions actually leverage the technology.',
+    text: 'Stay close to how people and institutions use Bitcoin.',
   },
   {
     number: '03',
@@ -94,7 +94,7 @@ export default function Home() {
       <section className="perspective section-shell" id="perspective">
         <div className="section-label"><span>01</span>Bitcoin perspective</div>
         <div className="perspective-lead">
-          <p className="eyebrow">Our thesis on Bitcoin</p>
+          <p className="eyebrow">Trey&apos;s perspective on Bitcoin</p>
           <h2>
             <span>Bitcoin&apos;s importance will be understood over <em>decades</em>, not market cycles.</span>
             <span className="thesis-second">Its impact grows as the technology becomes more <em>useful and accessible</em>, and embedded in everyday financial life.</span>
@@ -113,7 +113,7 @@ export default function Home() {
         <div className="section-label light-label"><span>02</span>Selected work</div>
         <div className="work-intro">
           <h2>Platforms &amp; projects</h2>
-          <p>Research, tools, and open frameworks designed to make Bitcoin more approachable, accessible, and useful.</p>
+          <p>Research, tools, and open frameworks that make Bitcoin research easier to understand and explore.</p>
         </div>
         <div className="venture-list">
           {ventures.map((venture) => (
@@ -139,7 +139,7 @@ export default function Home() {
             <h2>A decade working across the Bitcoin industry.</h2>
             <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware turned into a decade-long career across the industry—from crypto exchange operations and financial products to working at a crypto venture fund.</p>
             <p>Along the way, he has been fortunate to work at some of the biggest companies in the space, including Blockchain.com, Binance.US, 21Shares, and Tribe Capital. This site is a place to share what he has learned and help friends, family, and anyone trying to make sense of a complex, fast-moving industry.</p>
-            <p>Today, that work is centered on <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>—an open, verifiable, AI-native Bitcoin market intelligence platform. The goal is simple: use open-source research and accessible AI tools to make Bitcoin easier to understand, easier to access, and easier for people to explore on their own terms.</p>
+            <p>Today, that work is centered on <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>—an open, verifiable, AI-native Bitcoin market intelligence platform. The goal is simple: use open-source research and AI tools to help people understand Bitcoin and explore the evidence for themselves.</p>
             <a className="text-link" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">View LinkedIn <span aria-hidden="true">↗</span></a>
           </div>
         </div>
