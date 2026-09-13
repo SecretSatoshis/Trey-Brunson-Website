@@ -137,7 +137,7 @@ export default function Home() {
           <div className="about-copy">
             <p className="eyebrow">About Trey</p>
             <h2>A decade working across the Bitcoin industry.</h2>
-            <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware turned into a decade-long career across the industry—from crypto exchange operations and financial products to working at a crypto venture fund.</p>
+            <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware grew into a decade-long career spanning crypto exchanges, Bitcoin financial products, and crypto venture funds.</p>
             <p>Along the way, he has been fortunate to work at some of the biggest companies in the space, including Blockchain.com, Binance.US, 21Shares, and Tribe Capital.</p>
             <p>Today, Trey brings that experience to <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>, where he shares Bitcoin research, open data, and AI tools. The aim is to help friends, family, and other curious readers make sense of Bitcoin and form their own informed views.</p>
             <a className="text-link" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">View LinkedIn <span aria-hidden="true">↗</span></a>
