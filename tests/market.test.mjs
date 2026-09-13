@@ -65,6 +65,7 @@ test('live labels expire with source age, fetch age or a failed refresh', () => 
     assert.equal(tree.includes('Live market'), live);
     assert.equal(tree.includes('Live price'), !failed && priceAge <= 900);
     assert.equal(tree.includes('Live network'), !failed && fetchAge <= 300);
-    assert.equal(tree.includes('Price as of'), true);
+    assert.equal(tree.includes('As of'), true);
+    assert.equal(tree.includes(new Date((now - priceAge) * 1000).toISOString()), true);
   }
 });

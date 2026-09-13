@@ -165,7 +165,18 @@ export default function SupplyHeroModule() {
         </div>
       </div>
       {priceUpdatedAt !== null && (
-        <small>Price as of {new Date(priceUpdatedAt * 1000).toISOString().replace('T', ' ').replace('.000Z', ' UTC')}</small>
+        <small className="market-asof">
+          As of{' '}
+          <time
+            dateTime={new Date(priceUpdatedAt * 1000).toISOString()}
+            title={new Date(priceUpdatedAt * 1000).toLocaleString()}
+          >
+            {new Date(priceUpdatedAt * 1000).toLocaleTimeString(undefined, {
+              hour: 'numeric',
+              minute: '2-digit',
+            })}
+          </time>
+        </small>
       )}
     </aside>
   );
