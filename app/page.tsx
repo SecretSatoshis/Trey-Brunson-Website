@@ -7,7 +7,7 @@ const ventures = [
     title: 'Secret Satoshis',
     label: 'Bitcoin intelligence you can verify',
     description:
-      'An AI-native Bitcoin market intelligence platform built on open data, original analysis, and more than a decade inside Bitcoin markets.',
+      'An AI-native Bitcoin market intelligence platform combining original research, open data, and a long-term market outlook.',
     href: 'https://secretsatoshis.com/',
     cta: 'Explore the platform',
   },
@@ -16,7 +16,7 @@ const ventures = [
     title: 'Agent 21',
     label: 'Bitcoin AI agent',
     description:
-      'An AI research assistant for exploring Secret Satoshis research and Bitcoin data.',
+      'An AI agent for exploring Secret Satoshis research, data, and market frameworks through conversation.',
     href: 'https://chatgpt.com/g/g-BZXtVdU6M-agent-21',
     cta: 'Meet Agent 21',
   },
@@ -25,7 +25,7 @@ const ventures = [
     title: 'Bitcoin Chart Library',
     label: 'Open evidence',
     description:
-      'A searchable library of interactive charts for exploring Bitcoin through market cycles, valuation, network data, and performance.',
+      'Interactive charts for exploring Bitcoin’s price, network activity, supply, and valuation over time.',
     href: 'https://charts.secretsatoshis.com/',
     cta: 'View the library',
   },
@@ -39,13 +39,13 @@ const principles = [
   },
   {
     number: '02',
-    title: 'Stay close to the foundation',
+    title: 'Stay close to real-world use',
     text: 'Stay close to how people and institutions use Bitcoin.',
   },
   {
     number: '03',
     title: 'Create clarity through access',
-    text: 'Good research should be open and accessible, helping people form their own informed opinions and perspectives.',
+    text: 'Good research should be open and accessible, helping people examine the evidence and form their own views.',
   },
 ];
 
@@ -75,7 +75,7 @@ export default function Home() {
             Focused on <em>Bitcoin</em> and its growing role in the world since 2016.
           </h1>
           <div className="hero-bottom reveal-item">
-            <p>Trey Brunson is a professional in the Bitcoin industry with a decade of experience spanning crypto exchange operations, financial products, and venture capital.</p>
+            <p>Trey Brunson is a Bitcoin industry professional with a decade of experience across crypto exchange operations, financial products, and venture capital. Through Secret Satoshis, he shares research and tools that help people understand Bitcoin and explore the evidence for themselves.</p>
             <div className="hero-actions">
               <a className="button button-primary" href="#work">Explore the work <span aria-hidden="true">↓</span></a>
               <a className="button button-secondary" href="#about">About Trey</a>
@@ -113,7 +113,7 @@ export default function Home() {
         <div className="section-label light-label"><span>02</span>Selected work</div>
         <div className="work-intro">
           <h2>Platforms &amp; projects</h2>
-          <p>Research, tools, and open frameworks that make Bitcoin research easier to understand and explore.</p>
+          <p>Explore the research and tools behind Secret Satoshis—from market analysis and interactive charts to Agent 21.</p>
         </div>
         <div className="venture-list">
           {ventures.map((venture) => (
@@ -138,8 +138,8 @@ export default function Home() {
             <p className="eyebrow">About Trey</p>
             <h2>A decade working across the Bitcoin industry.</h2>
             <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware turned into a decade-long career across the industry—from crypto exchange operations and financial products to working at a crypto venture fund.</p>
-            <p>Along the way, he has been fortunate to work at some of the biggest companies in the space, including Blockchain.com, Binance.US, 21Shares, and Tribe Capital. This site is a place to share what he has learned and help friends, family, and anyone trying to make sense of a complex, fast-moving industry.</p>
-            <p>Today, that work is centered on <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>—an open, verifiable, AI-native Bitcoin market intelligence platform. The goal is simple: use open-source research and AI tools to help people understand Bitcoin and explore the evidence for themselves.</p>
+            <p>Along the way, he has been fortunate to work at some of the biggest companies in the space, including Blockchain.com, Binance.US, 21Shares, and Tribe Capital.</p>
+            <p>Today, Trey brings that experience to <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>, where he shares Bitcoin research, open data, and AI tools. The aim is to help friends, family, and other curious readers make sense of Bitcoin and form their own informed views.</p>
             <a className="text-link" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">View LinkedIn <span aria-hidden="true">↗</span></a>
           </div>
         </div>
@@ -148,6 +148,7 @@ export default function Home() {
       <section className="closing">
         <p className="eyebrow">Interested in connecting?</p>
         <h2>The future of Bitcoin is already here.<br /><em>It&apos;s just not evenly distributed.</em></h2>
+        <p className="closing-support">Interested in the research or the work behind Secret Satoshis? Connect with Trey on LinkedIn.</p>
         <div className="closing-links">
           <a className="button button-primary" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
         </div>
