@@ -72,10 +72,10 @@ export default function Home() {
         <div className="hero-grid" aria-hidden="true" />
         <div className="hero-inner">
           <h1 className="hero-title reveal-item">
-            Focused on <em>Bitcoin</em> and its growing role in the world since 2016.
+            Focused on <em>Bitcoin</em> and its growing role in Finance since 2016.
           </h1>
           <div className="hero-bottom reveal-item">
-            <p>Trey Brunson is a Bitcoin industry professional with a decade of experience working across crypto exchanges, Bitcoin financial products, and crypto venture funds. Through Secret Satoshis, he shares research and tools that help people understand Bitcoin and explore the evidence for themselves.</p>
+            <p>Trey Brunson is a Bitcoin industry professional with a decade of experience working across crypto exchanges, Bitcoin financial products, and crypto venture funds.</p>
             <div className="hero-actions">
               <a className="button button-primary" href="#work">Explore the work <span aria-hidden="true">↓</span></a>
               <a className="button button-secondary" href="#about">About Trey</a>
