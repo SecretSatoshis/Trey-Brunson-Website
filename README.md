@@ -30,6 +30,10 @@ Trey-Brunson-Website/
 │   ├── favicon.png
 │   ├── og.jpg
 │   └── trey-headshot.webp
+├── tests/
+│   └── market.test.mjs  # API validation, CSP, polling and freshness labels
+├── .nvmrc
+├── eslint.config.mjs
 ├── LICENSE
 ├── SECURITY.md
 ├── next.config.ts
@@ -37,6 +41,7 @@ Trey-Brunson-Website/
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 ├── proxy.ts             # Per-request Content Security Policy and script nonce
+├── tsconfig.json
 └── README.md
 ```
 
@@ -51,12 +56,13 @@ Trey-Brunson-Website/
 
 ## Live Bitcoin data
 
-The hero market module requests data from the internal `/api/bitcoin` route. That route retrieves the current block height and USD price from the public mempool.space API, validates both responses, and exposes a same-origin response cached for 60 seconds.
+The hero market module requests data from the internal `/api/bitcoin` route. That route retrieves the current block height and USD price from the public mempool.space API, validates both responses, and exposes a same-origin response that shared caches may hold for 30 seconds plus up to 30 seconds while revalidating.
 
 - **Bitcoin price** comes from the mempool.space USD price response.
 - **Bitcoin supply** is calculated from the current block height and Bitcoin's 210,000-block subsidy schedule.
 - **Market cap** is the current USD price multiplied by calculated issued supply.
-- The browser refreshes the module every 60 seconds.
+- The browser refreshes the module every 60 seconds, starting each refresh only after the previous one finishes.
+- **Live** labels expire when the price is more than 15 minutes old or the network data more than 5 minutes old, and after any failed refresh; the values then read **Last known**. Ages are measured on the server's clock, so a visitor whose device clock is wrong still sees the correct label.
 
 ## Requirements
 
@@ -79,12 +85,13 @@ Run the complete pre-push validation sequence:
 
 ```bash
 pnpm lint
-pnpm typecheck
-pnpm build
 pnpm audit --prod
+pnpm typecheck
+pnpm test
+pnpm build
 ```
 
-GitHub Actions runs lint, type checking, and the production build on every pull request and every push to `main`.
+GitHub Actions runs the same sequence — lint, a production dependency audit that fails on high-severity advisories, type checking, tests, and the production build — on every pull request and every push to `main`.
 
 ## License
 
