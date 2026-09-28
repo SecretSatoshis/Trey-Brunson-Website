@@ -91,6 +91,8 @@ pnpm test
 pnpm build
 ```
 
+When page content changes, also update `lastModified` in `app/sitemap.ts`.
+
 GitHub Actions runs the same sequence — lint, a production dependency audit that fails on high-severity advisories, type checking, tests, and the production build — on every pull request and every push to `main`.
 
 ## License

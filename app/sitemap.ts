@@ -8,7 +8,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: `${SITE_URL}/`,
-      lastModified: new Date('2026-08-27'),
+      // The date the page's content last changed. Update it with content edits; a build
+      // timestamp would tell crawlers every deploy changed the page.
+      lastModified: new Date('2026-09-28'),
       changeFrequency: 'monthly',
       priority: 1,
     },
