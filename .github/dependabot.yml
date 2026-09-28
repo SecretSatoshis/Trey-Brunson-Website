@@ -8,6 +8,16 @@ updates:
       site-dependencies:
         patterns:
           - "*"
+    ignore:
+      # Node types follow the Node 24 runtime (engines and .nvmrc), not the newest Node.
+      - dependency-name: "@types/node"
+        versions: [">=25"]
+      # eslint-config-next's React plugin crashes on ESLint 10.
+      - dependency-name: "eslint"
+        versions: [">=10"]
+      # typescript-eslint supports TypeScript below 6.1; TypeScript 7 breaks lint.
+      - dependency-name: "typescript"
+        versions: [">=6.1"]
     open-pull-requests-limit: 5
 
   - package-ecosystem: github-actions
