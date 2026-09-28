@@ -52,10 +52,11 @@ test('polls wait for completion, abort at deadline and stop on unmount', async (
   cleanup();
   assert.equal(timers.size, 0);
 });
-test('live labels expire with source age, fetch age or a failed refresh', () => {
+test('live labels expire with source age, fetch age or a failed refresh, on the server clock', () => {
   const now = 1789129000;
-  for (const [priceAge, fetchAge, failed, live] of [[60, 30, false, true], [901, 30, false, false], [60, 301, false, false], [60, 30, true, false]]) {
-    const states = [966502, 77022, now - priceAge, now - fetchAge, now, true, failed];
+  // skew: server clock minus browser clock. A wrong visitor clock must not change the labels.
+  for (const [priceAge, fetchAge, failed, live, skew] of [[60, 30, false, true, 0], [901, 30, false, false, 0], [60, 301, false, false, 0], [60, 30, true, false, 0], [60, 30, false, true, 600], [60, 30, false, true, -600], [901, 30, false, false, 600]]) {
+    const states = [966502, 77022, now - priceAge, now - fetchAge, skew, now - skew, true, failed];
     const component = load('app/SupplyHeroModule.tsx', {
       require: name => name === 'react' ? {
         useEffect() {}, useState: () => [states.shift(), () => {}], useMemo: fn => fn(),
@@ -68,4 +69,27 @@ test('live labels expire with source age, fetch age or a failed refresh', () => 
     assert.equal(tree.includes('As of'), true);
     assert.equal(tree.includes(new Date((now - priceAge) * 1000).toISOString()), true);
   }
+});
+test('a visitor clock behind the server does not reject valid data', async () => {
+  let effect, resolveRequest;
+  const setterCalls = [];
+  let stateIndex = 0;
+  const component = load('app/SupplyHeroModule.tsx', {
+    require: name => name === 'react' ? {
+      useEffect: fn => { effect = fn; },
+      useState: value => { const i = stateIndex++; setterCalls[i] = []; return [value, v => setterCalls[i].push(v)]; },
+      useMemo: fn => fn(),
+    } : { jsx() {}, jsxs() {} },
+    window: { setTimeout: () => 0, clearTimeout() {}, setInterval: () => 0, clearInterval() {} },
+    setTimeout: () => 0, clearTimeout() {},
+    fetch: () => new Promise(resolve => { resolveRequest = resolve; }),
+  }).default;
+  component(); const cleanup = effect();
+  const serverNow = Math.floor(Date.now() / 1000) + 600; // browser clock 10 minutes slow
+  resolveRequest(Response.json({ blockHeight: 966502, priceUsd: 77022, priceUpdatedAt: serverNow - 60, fetchedAt: serverNow }));
+  await new Promise(resolve => setImmediate(resolve));
+  const [requestFailed] = setterCalls[7];
+  assert.equal(requestFailed, false);
+  assert.ok(Math.abs(setterCalls[4][0] - 600) < 5); // clockOffset
+  cleanup();
 });

@@ -1,10 +1,11 @@
 import type { NextConfig } from 'next';
 
 /*
- * Content-Security-Policy is set in middleware.ts, not here: it carries a per-request
- * nonce so the JSON-LD block in app/layout.tsx can run without `script-src
- * 'unsafe-inline'`. Setting it in both places would emit two CSP headers, and browsers
- * enforce the intersection — which would block the nonced script.
+ * Content-Security-Policy is set in proxy.ts, not here: it carries a per-request nonce,
+ * which Next.js reads from the request's CSP header and attaches to its own runtime,
+ * bundle and inline bootstrap scripts, so `script-src` needs no 'unsafe-inline'.
+ * Setting it in both places would emit two CSP headers, and browsers enforce the
+ * intersection — which would block the nonced scripts.
  */
 
 const nextConfig: NextConfig = {

@@ -39,6 +39,8 @@ export default function SupplyHeroModule() {
   const [priceUsd, setPriceUsd] = useState<number | null>(null);
   const [priceUpdatedAt, setPriceUpdatedAt] = useState<number | null>(null);
   const [fetchedAt, setFetchedAt] = useState<number | null>(null);
+  // Server clock minus this browser's clock, measured when each response arrives.
+  const [clockOffset, setClockOffset] = useState(0);
   const [now, setNow] = useState(0);
   const [hasAttemptedUpdate, setHasAttemptedUpdate] = useState(false);
   const [requestFailed, setRequestFailed] = useState(false);
@@ -62,8 +64,7 @@ export default function SupplyHeroModule() {
             || !Number.isFinite(data.priceUsd) || data.priceUsd <= 0
             || !Number.isInteger(data.priceUpdatedAt) || data.priceUpdatedAt <= 0
             || !Number.isInteger(data.fetchedAt) || data.fetchedAt <= 0
-            || data.priceUpdatedAt > data.fetchedAt + 60
-            || data.fetchedAt > receivedAt + 60) {
+            || data.priceUpdatedAt > data.fetchedAt + 60) {
           throw new Error('Invalid Bitcoin market data');
         }
         if (disposed) return;
@@ -72,6 +73,7 @@ export default function SupplyHeroModule() {
         setPriceUsd(data.priceUsd);
         setPriceUpdatedAt(data.priceUpdatedAt);
         setFetchedAt(data.fetchedAt);
+        setClockOffset(data.fetchedAt - receivedAt);
         setRequestFailed(false);
       } catch {
         if (!disposed) setRequestFailed(true);
@@ -96,9 +98,12 @@ export default function SupplyHeroModule() {
   }, []);
 
   // Prices update less often than our network-height requests. Expire both labels
-  // even when the connection fails or no further response arrives.
-  const isPriceLive = !requestFailed && priceUpdatedAt !== null && now - priceUpdatedAt <= 15 * 60;
-  const isSupplyLive = !requestFailed && fetchedAt !== null && now - fetchedAt <= 5 * 60;
+  // even when the connection fails or no further response arrives. Ages are measured
+  // on the server's clock, so a visitor whose clock is wrong still sees the right label.
+  // Any shared-cache age of the response is bounded by the route's Cache-Control.
+  const serverNow = now + clockOffset;
+  const isPriceLive = !requestFailed && priceUpdatedAt !== null && serverNow - priceUpdatedAt <= 15 * 60;
+  const isSupplyLive = !requestFailed && fetchedAt !== null && serverNow - fetchedAt <= 5 * 60;
 
   const issued = useMemo(
     () => (blockHeight === null ? null : issuedSupplyAtHeight(blockHeight)),

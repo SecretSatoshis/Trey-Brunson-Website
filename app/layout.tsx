@@ -108,8 +108,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Minted per request by proxy.ts. Without it the JSON-LD block below would
-  // require `script-src 'unsafe-inline'`, which would let any injected script run too.
+  // Minted per request by proxy.ts. Reading headers() also opts every route into
+  // dynamic rendering, which the nonce requires: a statically rendered page would ship
+  // Next's inline scripts without it and the CSP would block them. The JSON-LD block is
+  // a data block CSP never executes; it carries the nonce so every <script> is nonced.
   const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   return (

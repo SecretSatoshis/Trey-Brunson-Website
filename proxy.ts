@@ -6,11 +6,12 @@ import type { NextRequest } from 'next/server';
  * a fresh nonce per request, and `headers()` in next.config is static. This is the
  * `proxy` file convention, which replaced `middleware` in Next 16.
  *
- * `script-src 'unsafe-inline'` used to be required by the one inline script the app
- * renders (the JSON-LD block in app/layout.tsx), but it defeats the XSS mitigation the
- * rest of the header set exists to provide: any future reflected or DOM-based injection
- * would execute unimpeded. A per-request nonce lets that one script run while everything
- * else stays blocked.
+ * Next.js renders inline bootstrap scripts, so without a nonce `script-src` would need
+ * 'unsafe-inline' — which defeats the XSS mitigation the rest of the header set exists
+ * to provide: any reflected or DOM-based injection would execute unimpeded. Next reads
+ * the nonce from the request's CSP header below and attaches it to its runtime, bundles
+ * and inline scripts, so those run while anything injected stays blocked. This requires
+ * dynamic rendering; app/layout.tsx opts in by reading headers().
  *
  * `strict-dynamic` lets the nonced Next bootstrap load its own chunks without each one
  * needing a nonce. CSP3 browsers ignore `'self'` for scripts once it is present; it is

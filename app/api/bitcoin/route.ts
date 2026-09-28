@@ -50,7 +50,10 @@ export async function GET() {
       { blockHeight, priceUsd, priceUpdatedAt, fetchedAt },
       {
         headers: {
-          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+          // A shared cache may serve this body for up to 60s. The client treats
+          // network data older than 5 minutes as no longer live, so the stale window
+          // must stay well inside that or a fresh poll would read as "Last known".
+          'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=30',
         },
       },
     );
