@@ -1,6 +1,6 @@
 # TreyBrunson.com
 
-Personal Website for [Trey Brunson](https://treybrunson.com/).
+Personal website for [Trey Brunson](https://treybrunson.com/).
 
 ## Background
 
@@ -35,6 +35,7 @@ Trey-Brunson-Website/
 ├── .nvmrc
 ├── eslint.config.mjs
 ├── LICENSE
+├── next-env.d.ts
 ├── SECURITY.md
 ├── next.config.ts
 ├── package.json

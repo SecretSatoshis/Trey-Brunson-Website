@@ -51,13 +51,13 @@ export default function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Every path except static assets, the image optimizer, and the favicon — none of
-     * them execute scripts, and running the proxy on them only adds latency. Prefetch
+     * Every path except build assets, the image optimizer and the image files in public/ —
+     * none of them execute scripts, and running the proxy on them only adds latency. Prefetch
      * requests are excluded too: they are served from the router cache, so a nonce
      * minted for one would never match the document that eventually renders.
      */
     {
-      source: '/((?!_next/static|_next/image|favicon.ico).*)',
+      source: '/((?!_next/static|_next/image|.*\\.(?:png|jpg|webp)$).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

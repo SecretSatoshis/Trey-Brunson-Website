@@ -4,9 +4,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { webcrypto } from 'node:crypto';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 import vm from 'node:vm';
 import ts from 'typescript';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Transpiles a source file and runs it in a sandbox with the given globals, returning its exports.
 function load(file, globals) {
   const source = fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: ts.JsxEmit.ReactJSX } }).outputText;
