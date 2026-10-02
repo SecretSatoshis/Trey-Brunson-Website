@@ -72,7 +72,7 @@ export default function Home() {
           <div className="hero-grid" aria-hidden="true" />
           <div className="hero-inner">
             <h1 className="hero-title reveal-item">
-              Focused on <em>Bitcoin</em> and its growing role in Finance since 2016.
+              Focused on <em>Bitcoin</em> and its growing role in finance since 2016.
             </h1>
             <div className="hero-bottom reveal-item">
               <p>Trey Brunson is a Bitcoin industry professional with a decade of experience working across crypto exchanges, Bitcoin financial products, and crypto venture funds.</p>
