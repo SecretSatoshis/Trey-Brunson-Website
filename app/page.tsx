@@ -4,30 +4,30 @@ import SupplyHeroModule from './SupplyHeroModule';
 const ventures = [
   {
     index: '01',
-    title: 'Secret Satoshis',
-    label: 'Bitcoin intelligence you can verify',
+    title: 'Secret Satoshis Newsletter',
+    label: 'Bitcoin market outlook',
     description:
-      'An AI-native Bitcoin market intelligence platform combining original research, open data, and a long-term market outlook.',
+      'A yearly Bitcoin price outlook and weekly market analysis that tracks it, written for long-term investors.',
     href: 'https://secretsatoshis.com/',
-    cta: 'Explore the platform',
+    cta: 'Read the newsletter',
   },
   {
     index: '02',
     title: 'Agent 21',
-    label: 'Bitcoin AI agent',
+    label: 'Bitcoin-native AI agent',
     description:
-      'An AI agent for exploring Secret Satoshis research, data, and market frameworks through conversation.',
-    href: 'https://chatgpt.com/g/g-BZXtVdU6M-agent-21',
+      'Helps you understand Bitcoin and analyze the market with Secret Satoshis research and current market and on-chain data.',
+    href: 'https://agent21.secretsatoshis.com/',
     cta: 'Meet Agent 21',
   },
   {
     index: '03',
-    title: 'Bitcoin Chart Library',
-    label: 'Open evidence',
+    title: 'Open-Source Code',
+    label: 'Open data and code',
     description:
-      'Interactive charts for exploring Bitcoin’s price, network activity, supply, and valuation over time.',
-    href: 'https://charts.secretsatoshis.com/',
-    cta: 'View the library',
+      'The data, notebooks, charts and models behind the analysis, open on GitHub for anyone to check and reuse.',
+    href: 'https://github.com/SecretSatoshis',
+    cta: 'View on GitHub',
   },
 ];
 
@@ -113,7 +113,7 @@ export default function Home() {
           <div className="section-label light-label"><span>02</span>Selected work</div>
           <div className="work-intro">
             <h2>Platforms &amp; projects</h2>
-            <p>Explore the research and tools behind Secret Satoshis—from market analysis and interactive charts to Agent 21.</p>
+            <p>Explore the research and tools behind Secret Satoshis—from the newsletter and Agent 21 to the open-source code behind them.</p>
           </div>
           <div className="venture-list">
             {ventures.map((venture) => (
