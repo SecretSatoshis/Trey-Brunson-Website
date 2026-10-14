@@ -2,8 +2,8 @@
 
 The personal site of [Trey Brunson](https://treybrunson.com/), focused on Bitcoin since 2016
 and a decade working across crypto exchanges, Bitcoin financial products and crypto venture
-funds. It introduces Trey, links to the Secret Satoshis platforms, and shows live Bitcoin
-price, supply and market cap.
+funds. It introduces Trey and his Secret Satoshis projects (the newsletter, Agent 21 and the
+open-source code) and shows live Bitcoin price, supply and market cap.
 
 - **Visit the site:** [treybrunson.com](https://treybrunson.com/)
 - **Connect on LinkedIn:** [Trey Brunson](https://www.linkedin.com/in/trey-brunson)
@@ -66,7 +66,7 @@ pnpm build
 
 GitHub Actions runs them on every pull request and every push to `main`; its audit fails on
 high-severity advisories. When page content changes, also update `lastModified` in
-`app/sitemap.ts`.
+`app/sitemap.ts`, and keep `public/llms.txt` in step with the page.
 
 ## Project layout
 
@@ -77,6 +77,7 @@ high-severity advisories. When page content changes, also update `lastModified` 
 | `app/api/bitcoin/route.ts` | The validated, cached mempool.space data |
 | `app/globals.css` | Page styles |
 | `app/not-found.tsx`, `app/robots.ts`, `app/sitemap.ts` | The not-found page, crawler rules and sitemap |
+| `public/llms.txt` | A short guide to Trey and his projects for AI agents |
 | `proxy.ts` | Per-request Content-Security-Policy and script nonce |
 | `public/` | Favicon, social card and headshot |
 | `tests/market.test.mjs` | API validation, CSP, polling and freshness labels |

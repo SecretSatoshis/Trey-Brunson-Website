@@ -1,0 +1,33 @@
+# Trey Brunson
+
+> Trey Brunson is a Bitcoin industry professional, focused on Bitcoin since 2016, who
+> created Secret Satoshis: a Bitcoin newsletter, the Bitcoin-native AI agent Agent 21, and
+> the open data and code behind them.
+
+Trey got into Bitcoin at the University of Delaware. His career spans crypto exchanges,
+Bitcoin financial products and crypto venture funds, including Blockchain.com, Grant
+Thornton, Binance.US, 21Shares and Tribe Capital. He is based in New York.
+
+This site is a single page. Its live Bitcoin price, supply and market cap come from the
+public mempool.space API and are not investment data; check the Secret Satoshis sources
+below for research and dated releases.
+
+## Start here
+
+- [Trey Brunson](https://treybrunson.com/): about Trey, his work and how to reach him.
+- [LinkedIn](https://www.linkedin.com/in/trey-brunson): career history and contact.
+
+## Platforms and projects
+
+- [Secret Satoshis Newsletter](https://secretsatoshis.com/): a yearly Bitcoin price outlook and weekly market analysis that tracks it, written for long-term investors.
+- [Agent 21](https://agent21.secretsatoshis.com/): the Bitcoin-native AI agent built by Secret Satoshis, in invite-only beta.
+- [Open-source code](https://github.com/SecretSatoshis): the data, notebooks, charts and models behind the analysis.
+
+## Guides for agents
+
+- [Secret Satoshis guide](https://secretsatoshis.com/llms.txt): the newsletter, products, public data releases and code.
+- [Agent 21 guide](https://agent21.secretsatoshis.com/llms.txt): public capabilities, examples and beta access.
+
+## Optional
+
+- [Site source](https://github.com/SecretSatoshis/Trey-Brunson-Website): this site's code, GPL-3.0.

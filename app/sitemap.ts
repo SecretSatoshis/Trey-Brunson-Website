@@ -13,6 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date('2026-10-14'),
       changeFrequency: 'monthly',
       priority: 1,
+      // The page's own photo, so image search can attribute it to the page.
+      images: [`${SITE_URL}/trey-headshot.webp`],
     },
   ];
 }
