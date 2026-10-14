@@ -31,24 +31,6 @@ const ventures = [
   },
 ];
 
-const principles = [
-  {
-    number: '01',
-    title: 'Think in decades',
-    text: "Focus on first principles and Bitcoin's long-term growth—not short-term narratives.",
-  },
-  {
-    number: '02',
-    title: 'Stay close to real-world use',
-    text: 'Stay close to how people and institutions use Bitcoin.',
-  },
-  {
-    number: '03',
-    title: 'Create clarity through access',
-    text: 'Good research should be open and accessible, helping people examine the evidence and form their own views.',
-  },
-];
-
 export default function Home() {
   const currentYear = new Date().getFullYear();
 
@@ -91,26 +73,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="perspective section-shell" id="perspective">
-          <div className="section-label"><span>01</span>Bitcoin perspective</div>
-          <div className="perspective-lead">
-            <p className="eyebrow">Trey&apos;s perspective on Bitcoin</p>
-            <h2>
-              <span>Bitcoin&apos;s importance will be understood over <em>decades</em>, not market cycles.</span>
-              <span className="thesis-second">Its impact grows as the technology becomes more <em>useful and accessible</em>, and embedded in everyday financial life.</span>
-            </h2>
-          </div>
-          <div className="principles">
-            {principles.map((principle) => (
-              <article className="principle" key={principle.number}>
-                <span>{principle.number}</span><h3>{principle.title}</h3><p>{principle.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
         <section className="work section-shell" id="work">
-          <div className="section-label light-label"><span>02</span>Selected work</div>
+          <div className="section-label light-label"><span>01</span>Selected work</div>
           <div className="work-intro">
             <h2>Platforms &amp; projects</h2>
             <p>Explore the research and tools behind Secret Satoshis—from the newsletter and Agent 21 to the open-source code behind them.</p>
@@ -128,7 +92,7 @@ export default function Home() {
         </section>
 
         <section className="about section-shell" id="about">
-          <div className="section-label"><span>03</span>About</div>
+          <div className="section-label"><span>02</span>About</div>
           <div className="about-grid">
             <figure className="portrait-wrap">
               <Image className="portrait" src="/trey-headshot.webp" alt="Portrait of Trey Brunson" width={1213} height={1818} sizes="(max-width: 760px) 100vw, (max-width: 1000px) 76vw, 42vw" />
@@ -148,7 +112,7 @@ export default function Home() {
         <section className="closing">
           <p className="eyebrow">Interested in connecting?</p>
           <h2>The future of Bitcoin is already here.<br /><em>It&apos;s just not evenly distributed.</em></h2>
-          <p className="closing-support">Interested in the research or the work behind Secret Satoshis? Connect with Trey on LinkedIn.</p>
+          <p className="closing-support">For questions about the research or the work behind Secret Satoshis, connect with Trey on LinkedIn.</p>
           <div className="closing-links">
             <a className="button button-primary" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
           </div>
