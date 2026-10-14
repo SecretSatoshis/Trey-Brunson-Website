@@ -5,7 +5,7 @@ const ventures = [
   {
     index: '01',
     title: 'Secret Satoshis Newsletter',
-    label: 'Bitcoin market outlook',
+    label: 'Bitcoin market analysis',
     description:
       'A yearly Bitcoin price outlook and weekly market analysis that tracks it, written for long-term investors.',
     href: 'https://secretsatoshis.com/',
