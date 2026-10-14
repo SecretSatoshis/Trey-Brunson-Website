@@ -1,88 +1,60 @@
 # TreyBrunson.com
 
-Personal website for [Trey Brunson](https://treybrunson.com/).
+The personal site of [Trey Brunson](https://treybrunson.com/), focused on Bitcoin since 2016
+and a decade working across crypto exchanges, Bitcoin financial products and crypto venture
+funds. It introduces Trey, links to the Secret Satoshis platforms, and shows live Bitcoin
+price, supply and market cap.
 
-## Background
+- **Visit the site:** [treybrunson.com](https://treybrunson.com/)
+- **Connect on LinkedIn:** [Trey Brunson](https://www.linkedin.com/in/trey-brunson)
 
-Trey Brunson is a Bitcoin industry professional with a decade of experience working across crypto exchanges, Bitcoin financial products, and crypto venture funds.
+## How it works
 
-## Contact
+```mermaid
+flowchart LR
+    M[("mempool.space<br/>price & block height")]
 
-Connect with [Trey Brunson on LinkedIn](https://www.linkedin.com/in/trey-brunson).
+    subgraph Site["treybrunson.com"]
+        direction LR
+        A["/api/bitcoin<br/>validate & cache"] --> H["Hero market<br/>module"]
+    end
 
-## Project structure
-
-```text
-Trey-Brunson-Website/
-├── .github/
-│   ├── workflows/ci.yml
-│   └── dependabot.yml
-├── app/
-│   ├── api/bitcoin/route.ts
-│   ├── SupplyHeroModule.tsx
-│   ├── globals.css
-│   ├── layout.tsx
-│   ├── not-found.tsx
-│   ├── page.tsx
-│   ├── robots.ts
-│   └── sitemap.ts
-├── public/
-│   ├── favicon.png
-│   ├── og.jpg
-│   └── trey-headshot.webp
-├── tests/
-│   └── market.test.mjs  # API validation, CSP, polling and freshness labels
-├── .nvmrc
-├── eslint.config.mjs
-├── LICENSE
-├── next-env.d.ts
-├── SECURITY.md
-├── next.config.ts
-├── package.json
-├── pnpm-lock.yaml
-├── pnpm-workspace.yaml
-├── proxy.ts             # Per-request Content Security Policy and script nonce
-├── tsconfig.json
-└── README.md
+    M --> A
 ```
 
-## Technology
+The site is a Next.js 16 App Router app in React 19 and TypeScript, deployed on Vercel.
+`proxy.ts` sets a Content-Security-Policy with a fresh script nonce on every request.
 
-- Next.js 16 App Router
-- React 19
-- TypeScript
-- CSS Grid, Flexbox, custom properties, and responsive media queries
-- Native Next.js image and font optimization
-- Vercel-compatible security headers and production build
+The hero's market module reads the site's own `/api/bitcoin` route. That route fetches the
+current block height and USD price from the public mempool.space API, validates both, and
+returns a same-origin response that shared caches may hold for 30 seconds, plus up to 30
+seconds while revalidating.
 
-## Live Bitcoin data
+| Figure | Where it comes from |
+|--------|---------------------|
+| **Bitcoin price** | mempool.space's USD price |
+| **Bitcoin supply** | Calculated from the block height and Bitcoin's 210,000-block subsidy schedule |
+| **Market cap** | The price multiplied by the calculated supply |
 
-The hero market module requests data from the internal `/api/bitcoin` route. That route retrieves the current block height and USD price from the public mempool.space API, validates both responses, and exposes a same-origin response that shared caches may hold for 30 seconds plus up to 30 seconds while revalidating.
+The browser refreshes the module every 60 seconds, starting each refresh only after the
+previous one finishes. **Live** labels turn to **Last known** when the price is more than 15
+minutes old, the network data more than 5 minutes old, or a refresh fails. Ages are measured
+on the server's clock, so a visitor whose device clock is wrong still sees the right label.
 
-- **Bitcoin price** comes from the mempool.space USD price response.
-- **Bitcoin supply** is calculated from the current block height and Bitcoin's 210,000-block subsidy schedule.
-- **Market cap** is the current USD price multiplied by calculated issued supply.
-- The browser refreshes the module every 60 seconds, starting each refresh only after the previous one finishes.
-- **Live** labels expire when the price is more than 15 minutes old or the network data more than 5 minutes old, and after any failed refresh; the values then read **Last known**. Ages are measured on the server's clock, so a visitor whose device clock is wrong still sees the correct label.
+## Quick start
 
-## Requirements
-
-- Node.js 24 (`.nvmrc` and `engines.node`)
-- pnpm 11.19.0 (`packageManager`)
-
-## Local development
+You need Node 24 (`.nvmrc`) and pnpm 11.19.0 (`packageManager` in `package.json`).
 
 ```bash
+git clone https://github.com/SecretSatoshis/Trey-Brunson-Website.git
+cd Trey-Brunson-Website
 nvm use
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Next.js serves the local site at [http://localhost:3000](http://localhost:3000) by default.
-
-## Validation
-
-Run the complete pre-push validation sequence:
+Then open [http://localhost:3000](http://localhost:3000). Before pushing, run the same checks
+as CI:
 
 ```bash
 pnpm lint
@@ -92,10 +64,23 @@ pnpm test
 pnpm build
 ```
 
-When page content changes, also update `lastModified` in `app/sitemap.ts`.
+GitHub Actions runs them on every pull request and every push to `main`; its audit fails on
+high-severity advisories. When page content changes, also update `lastModified` in
+`app/sitemap.ts`.
 
-GitHub Actions runs the same sequence — lint, a production dependency audit that fails on high-severity advisories, type checking, tests, and the production build — on every pull request and every push to `main`.
+## Project layout
+
+| Path | What's there |
+|------|--------------|
+| `app/page.tsx`, `app/layout.tsx` | The page, its metadata and fonts |
+| `app/SupplyHeroModule.tsx` | The hero's live market module |
+| `app/api/bitcoin/route.ts` | The validated, cached mempool.space data |
+| `app/globals.css` | Page styles |
+| `app/not-found.tsx`, `app/robots.ts`, `app/sitemap.ts` | The not-found page, crawler rules and sitemap |
+| `proxy.ts` | Per-request Content-Security-Policy and script nonce |
+| `public/` | Favicon, social card and headshot |
+| `tests/market.test.mjs` | API validation, CSP, polling and freshness labels |
 
 ## License
 
-Licensed under the [GNU General Public License v3.0](LICENSE).
+[GPL-3.0](LICENSE).
