@@ -1,2 +1,6 @@
 allowBuilds:
   unrs-resolver: true
+# Patched versions of packages Next.js pulls in, until a Next release requires them.
+overrides:
+  sharp: ^0.35.5
+  source-map-js: ^1.2.2
