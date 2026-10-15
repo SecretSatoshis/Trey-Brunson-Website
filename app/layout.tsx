@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
 const SITE_URL = 'https://treybrunson.com';
-const SITE_TITLE = 'Trey Brunson — Bitcoin Industry Professional';
+const SITE_TITLE = 'Trey Brunson — Focused on Bitcoin Since 2016';
 const SITE_DESCRIPTION =
   'Trey Brunson is a Bitcoin industry professional focused on making Bitcoin research easier to understand and explore.';
 
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: '/',
     siteName: 'Trey Brunson',
-    title: 'Trey Brunson — Focused on Bitcoin Since 2016',
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     images: [
       {
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Trey Brunson — Focused on Bitcoin Since 2016',
+    title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     images: ['/og.jpg'],
   },
