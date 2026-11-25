@@ -83,13 +83,36 @@ const structuredData = {
       url: `${SITE_URL}/`,
       image: `${SITE_URL}/trey-headshot.webp`,
       description: SITE_DESCRIPTION,
+      jobTitle: 'Founder, Secret Satoshis',
+      worksFor: {
+        '@id': 'https://secretsatoshis.com/#organization',
+      },
       alumniOf: {
         '@type': 'CollegeOrUniversity',
         name: 'University of Delaware',
       },
       sameAs: [
         'https://www.linkedin.com/in/trey-brunson',
+        'https://github.com/SecretSatoshis',
         'https://secretsatoshis.com/',
+        'https://newsletter.secretsatoshis.com/',
+        'https://agent21.secretsatoshis.com/',
+      ],
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://secretsatoshis.com/#organization',
+      name: 'Secret Satoshis',
+      url: 'https://secretsatoshis.com/',
+      description:
+        'Bitcoin market analysis, open data, interactive charts, and the Bitcoin-native AI agent Agent 21.',
+      founder: { '@id': `${SITE_URL}/#person` },
+      sameAs: [
+        'https://newsletter.secretsatoshis.com/',
+        'https://dashboard.secretsatoshis.com/',
+        'https://charts.secretsatoshis.com/',
+        'https://agent21.secretsatoshis.com/',
+        'https://github.com/SecretSatoshis',
       ],
     },
     {
@@ -99,6 +122,7 @@ const structuredData = {
       name: 'Trey Brunson',
       description: SITE_DESCRIPTION,
       author: { '@id': `${SITE_URL}/#person` },
+      publisher: { '@id': 'https://secretsatoshis.com/#organization' },
     },
   ],
 };

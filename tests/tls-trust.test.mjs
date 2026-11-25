@@ -4,13 +4,15 @@ import { readFileSync } from 'node:fs';
 import { rootCertificates, getCACertificates } from 'node:tls';
 import { filterTrustedCertificates, hardenTlsTrust } from '../lib/tls-trust.ts';
 
-test('removes compromised CA keys while preserving unrelated trusted certificates', () => {
+test('removes compromised CA keys, skips malformed entries, and preserves unrelated trusted certificates', () => {
   const blocked = readFileSync(new URL('./fixtures/emudhra-compromised-root.txt', import.meta.url), 'utf8');
   const clean = filterTrustedCertificates(rootCertificates);
   assert.ok(clean.length > 100);
   assert.deepEqual(filterTrustedCertificates([...clean, blocked]), clean);
   assert.deepEqual(filterTrustedCertificates(clean), clean);
-  assert.throws(() => filterTrustedCertificates(['not a certificate']));
+  // Malformed PEM entries are logged and skipped instead of crashing server startup.
+  assert.deepEqual(filterTrustedCertificates([...clean, 'not a certificate']), clean);
+  assert.deepEqual(filterTrustedCertificates(['not a certificate']), []);
 });
 
 test('installs a nonempty filtered default trust policy and is idempotent', () => {

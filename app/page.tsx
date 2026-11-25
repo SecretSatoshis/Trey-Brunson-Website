@@ -8,7 +8,7 @@ const ventures = [
     label: 'Bitcoin market analysis',
     description:
       'A yearly Bitcoin price outlook and weekly market analysis that tracks it, written for long-term investors.',
-    href: 'https://secretsatoshis.com/',
+    href: 'https://newsletter.secretsatoshis.com/',
     cta: 'Read the newsletter',
   },
   {
@@ -31,6 +31,27 @@ const ventures = [
   },
 ];
 
+const flagshipEssays = [
+  {
+    category: 'Annual Outlook',
+    title: '2026 Bitcoin Price Outlook',
+    summary: 'Bear, base, and bull year-end price scenarios tracked in public all year.',
+    href: 'https://newsletter.secretsatoshis.com/p/bitcoin-2026-price-outlook',
+  },
+  {
+    category: 'Investment Strategy',
+    title: 'Should I buy bitcoin?',
+    summary: 'A data-driven study testing a long-term Bitcoin savings plan across real price history.',
+    href: 'https://newsletter.secretsatoshis.com/p/should-i-buy-bitcoin',
+  },
+  {
+    category: 'Weekly Analysis',
+    title: 'Weekly Bitcoin Recap',
+    summary: 'Every Monday: last week\u2019s key stories, market numbers, and where price sits against the outlook.',
+    href: 'https://newsletter.secretsatoshis.com/t/weekly-bitcoin-recap',
+  },
+];
+
 export default function Home() {
   const currentYear = new Date().getFullYear();
 
@@ -43,8 +64,8 @@ export default function Home() {
             Trey Brunson<span aria-hidden="true">.</span>
           </a>
           <nav className="header-links" aria-label="External links">
-            <a href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
             <a href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis <span aria-hidden="true">↗</span></a>
+            <a href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
           </nav>
         </div>
       </header>
@@ -89,6 +110,22 @@ export default function Home() {
               </a>
             ))}
           </div>
+          <div className="essays-block" aria-labelledby="selected-research-heading">
+            <div className="essays-head">
+              <p className="eyebrow">Selected research</p>
+              <h3 id="selected-research-heading">Flagship essays</h3>
+            </div>
+            <div className="essay-list">
+              {flagshipEssays.map((essay) => (
+                <a className="essay-card" href={essay.href} target="_blank" rel="noopener noreferrer" key={essay.href}>
+                  <p className="essay-category">{essay.category}</p>
+                  <h4>{essay.title}</h4>
+                  <p className="essay-summary">{essay.summary}</p>
+                  <span className="essay-link">Read piece <b aria-hidden="true">↗</b></span>
+                </a>
+              ))}
+            </div>
+          </div>
         </section>
 
         <section className="about section-shell" id="about">
@@ -102,7 +139,7 @@ export default function Home() {
               <p className="eyebrow">About Trey</p>
               <h2>A decade working across the Bitcoin industry.</h2>
               <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware grew into a decade-long career spanning crypto exchanges, Bitcoin financial products, and crypto venture funds.</p>
-              <p>Along the way, he has gained experience at industry leaders including Blockchain.com, Binance.US, 21Shares, and Tribe Capital.</p>
+              <p>Along the way, he has worked across advisory, exchange operations, institutional Bitcoin products, and crypto venture investing at Blockchain.com, Grant Thornton, Binance.US, 21Shares, and Tribe Capital.</p>
               <p>Today, Trey brings that experience to <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>, where he shares Bitcoin research, open data, and AI tools. The aim is to help friends, family, and other curious readers make sense of Bitcoin and form their own informed views.</p>
               <a className="text-link" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">View LinkedIn <span aria-hidden="true">↗</span></a>
             </div>
@@ -110,11 +147,12 @@ export default function Home() {
         </section>
 
         <section className="closing">
-          <p className="eyebrow">Interested in connecting?</p>
+          <p className="eyebrow">Follow the research</p>
           <h2>The future of Bitcoin is already here.<br /><em>It&apos;s just not evenly distributed.</em></h2>
-          <p className="closing-support">For questions about the research or the work behind Secret Satoshis, connect with Trey on LinkedIn.</p>
+          <p className="closing-support">Read the yearly Bitcoin price outlook and Monday market recaps in the Secret Satoshis Newsletter, or connect with Trey on LinkedIn.</p>
           <div className="closing-links">
-            <a className="button button-primary" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
+            <a className="button button-primary" href="https://newsletter.secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Subscribe to Secret Satoshis <span aria-hidden="true">↗</span></a>
+            <a className="button button-secondary" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span aria-hidden="true">↗</span></a>
           </div>
         </section>
       </main>

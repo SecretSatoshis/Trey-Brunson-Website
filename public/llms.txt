@@ -4,24 +4,34 @@
 > created Secret Satoshis: a Bitcoin newsletter, the Bitcoin-native AI agent Agent 21, and
 > the open data and code behind them.
 
-Trey got into Bitcoin at the University of Delaware. His career spans crypto exchanges,
-Bitcoin financial products and crypto venture funds, including Blockchain.com, Grant
-Thornton, Binance.US, 21Shares and Tribe Capital. He is based in New York.
+Trey got into Bitcoin at the University of Delaware. His career spans advisory, crypto
+exchanges, institutional Bitcoin products, and crypto venture funds at Blockchain.com,
+Grant Thornton, Binance.US, 21Shares, and Tribe Capital. He is based in New York.
 
-This site is a single page. Its live Bitcoin price, supply and market cap come from the
-public mempool.space API and are not investment data; check the Secret Satoshis sources
-below for research and dated releases.
+This site is a single page. Its live Bitcoin price, UTXO circulating supply, and market
+cap are fetched primarily from BRK (bitview.space) with automatic failover to the public
+mempool.space API (and protocol-scheduled supply fallback), matching Secret Satoshis'
+other live surfaces. Check the Secret Satoshis sources below for dated research releases.
 
 ## Start here
 
 - [Trey Brunson](https://treybrunson.com/): about Trey, his work and how to reach him.
+- [Secret Satoshis](https://secretsatoshis.com/): overview of the newsletter, Agent 21, and research tools.
 - [LinkedIn](https://www.linkedin.com/in/trey-brunson): career history and contact.
 
 ## Platforms and projects
 
-- [Secret Satoshis Newsletter](https://secretsatoshis.com/): a yearly Bitcoin price outlook and weekly market analysis that tracks it, written for long-term investors.
+- [Secret Satoshis Newsletter](https://newsletter.secretsatoshis.com/): a yearly Bitcoin price outlook and weekly market analysis that tracks it, written for long-term investors.
 - [Agent 21](https://agent21.secretsatoshis.com/): the Bitcoin-native AI agent built by Secret Satoshis, in invite-only beta.
+- [Market Dashboard](https://dashboard.secretsatoshis.com/): daily Bitcoin market data, valuation models, on-chain conditions, and cycle context.
+- [Chart Library](https://charts.secretsatoshis.com/): interactive charts covering price, ETF flows, on-chain activity, supply, mining, and valuation.
 - [Open-source code](https://github.com/SecretSatoshis): the data, notebooks, charts and models behind the analysis.
+
+## Flagship essays
+
+- [2026 Bitcoin Price Outlook](https://newsletter.secretsatoshis.com/p/bitcoin-2026-price-outlook): bear, base, and bull year-end Bitcoin price scenarios tracked in public all year.
+- [Should I buy bitcoin?](https://newsletter.secretsatoshis.com/p/should-i-buy-bitcoin): a data-driven case study testing a long-term Bitcoin savings plan across real price history.
+- [Weekly Bitcoin Recap](https://newsletter.secretsatoshis.com/t/weekly-bitcoin-recap): every Monday's key Bitcoin stories, market numbers, and outlook tracking.
 
 ## Guides for agents
 

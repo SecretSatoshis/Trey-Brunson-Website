@@ -1,45 +1,56 @@
 # TreyBrunson.com
 
 The personal site of [Trey Brunson](https://treybrunson.com/), focused on Bitcoin since 2016
-and a decade working across crypto exchanges, Bitcoin financial products and crypto venture
-funds. It introduces Trey and his Secret Satoshis projects (the newsletter, Agent 21 and the
-open-source code) and shows live Bitcoin price, supply and market cap.
+and a decade working across advisory, crypto exchanges, institutional Bitcoin products, and
+crypto venture funds. It introduces Trey, his Secret Satoshis platforms (the newsletter,
+Agent 21, and open-source code), flagship essays, and live Bitcoin price, supply, and market
+cap linked to the Secret Satoshis Market Dashboard and Chart Library.
 
 - **Visit the site:** [treybrunson.com](https://treybrunson.com/)
+- **Read Secret Satoshis:** [newsletter.secretsatoshis.com](https://newsletter.secretsatoshis.com/)
 - **Connect on LinkedIn:** [Trey Brunson](https://www.linkedin.com/in/trey-brunson)
 
 ## How it works
 
 ```mermaid
 flowchart LR
-    M[("mempool.space<br/>price & block height")]
+    B[("BRK (bitview.space)<br/>primary price, tip &amp; UTXO supply")]
+    M[("mempool.space<br/>automatic failover")]
 
     subgraph Site["treybrunson.com"]
         direction LR
-        A["/api/bitcoin<br/>validate & cache"] --> H["Hero market<br/>module"]
+        A["/api/bitcoin<br/>validate, coalesce &amp; cache"] --> H["Hero market<br/>module"]
     end
 
-    M --> A
+    B --> A
+    M -. failover .-> A
 ```
 
 The site is a Next.js 16 App Router app in React 19 and TypeScript, deployed on Vercel.
-`proxy.ts` sets a Content-Security-Policy with a fresh script nonce on every request.
+`proxy.ts` sets a Content-Security-Policy with a fresh 16-byte random script nonce on every
+HTML request, and `instrumentation.ts` runs `lib/tls-trust.ts` on startup to strip
+compromised root certificates from Node's outbound TLS trust store.
 
-The hero's market module reads the site's own `/api/bitcoin` route. That route fetches the
-current block height and USD price from the public mempool.space API, validates both, and
-returns a same-origin response that shared caches may hold for 30 seconds, plus up to 30
-seconds while revalidating.
+The hero's market module reads the site's own `/api/bitcoin` route. That route queries BRK
+(`bitview.space`) as its primary upstream for USD price, chain tip height, and UTXO
+circulating supply, fails over automatically to `mempool.space` (and protocol-scheduled
+supply math) if BRK is unavailable, validates all values against mainnet sanity bounds,
+rejects unexpected query strings, coalesces concurrent requests with a 15-second in-memory
+TTL, and returns a same-origin response that shared caches may hold for 30 seconds plus up
+to 30 seconds while revalidating.
 
 | Figure | Where it comes from |
 |--------|---------------------|
-| **Bitcoin price** | mempool.space's USD price |
-| **Bitcoin supply** | Calculated from the block height and Bitcoin's 210,000-block subsidy schedule |
-| **Market cap** | The price multiplied by the calculated supply |
+| **Bitcoin price** | BRK (`bitview.space`) USD price, with automatic failover to `mempool.space` |
+| **Bitcoin supply** | BRK UTXO `circulating_supply` (floored to whole BTC), with scheduled halving-era fallback from block height |
+| **Market cap** | Price multiplied by supply, formatted in Billions below \$1T and Trillions at or above \$1T |
 
-The browser refreshes the module every 60 seconds, starting each refresh only after the
-previous one finishes. **Live** labels turn to **Last known** when the price is more than 15
-minutes old, the network data more than 5 minutes old, or a refresh fails. Ages are measured
-on the server's clock, so a visitor whose device clock is wrong still sees the right label.
+The browser refreshes the module every 60 seconds while the tab is visible, pausing in
+background tabs and refreshing on return if stale. **Live** labels tolerate a single
+transient blip while timestamps stay within their freshness window, and turn to **Last
+known** when the price is more than 15 minutes old, the network data more than 5 minutes
+old, or two consecutive refreshes fail. Server clock offset is derived from HTTP `Date` and
+`Age` headers so CDN cache age stays visible in staleness tracking.
 
 ## Quick start
 
@@ -72,15 +83,18 @@ high-severity advisories. When page content changes, also update `lastModified` 
 
 | Path | What's there |
 |------|--------------|
-| `app/page.tsx`, `app/layout.tsx` | The page, its metadata and fonts |
-| `app/SupplyHeroModule.tsx` | The hero's live market module |
-| `app/api/bitcoin/route.ts` | The validated, cached mempool.space data |
+| `app/page.tsx`, `app/layout.tsx` | The page, JSON-LD entity graph, metadata and fonts |
+| `app/SupplyHeroModule.tsx` | The hero's live market module and dashboard/charts links |
+| `app/api/bitcoin/route.ts` | BRK-primary / mempool-failover validated, coalesced market API |
 | `app/globals.css` | Page styles |
 | `app/not-found.tsx`, `app/robots.ts`, `app/sitemap.ts` | The not-found page, crawler rules and sitemap |
+| `lib/bitcoin.ts` | Halving-schedule supply math, sanity validators, RFC 9111 clock offset and formatters |
+| `lib/tls-trust.ts`, `instrumentation.ts` | Outbound TLS root-CA hardening with resilient fallback |
+| `proxy.ts` | Per-request Content-Security-Policy and 16-byte script nonce |
+| `next.config.ts` | Static security headers (HSTS, COOP, framing, permissions) |
 | `public/llms.txt` | A short guide to Trey and his projects for AI agents |
-| `proxy.ts` | Per-request Content-Security-Policy and script nonce |
 | `public/` | Favicon, social card and headshot |
-| `tests/market.test.mjs` | API validation, CSP, polling and freshness labels |
+| `tests/market.test.mjs`, `tests/tls-trust.test.mjs` | Unit tests for API failover, coalescing, halving boundaries, CSP, polling, freshness and TLS trust |
 
 ## License
 

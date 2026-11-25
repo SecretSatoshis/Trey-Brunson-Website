@@ -10,7 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${SITE_URL}/`,
       // The date the page's content last changed. Update it with content edits; a build
       // timestamp would tell crawlers every deploy changed the page.
-      lastModified: new Date('2026-10-14'),
+      lastModified: new Date('2026-11-24'),
       changeFrequency: 'monthly',
       priority: 1,
       // The page's own photo, so image search can attribute it to the page.

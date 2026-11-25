@@ -20,8 +20,14 @@ import type { NextRequest } from 'next/server';
  * `style-src` still needs `'unsafe-inline'`: Next inlines critical CSS, and there is no
  * nonce hook for it.
  */
+function mintNonce(): string {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Buffer.from(bytes).toString('base64');
+}
+
 export default function proxy(request: NextRequest) {
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const nonce = mintNonce();
 
   const isDevelopment = process.env.NODE_ENV === 'development';
   const csp = [
@@ -31,7 +37,8 @@ export default function proxy(request: NextRequest) {
     "font-src 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "img-src 'self' data: blob:",
+    "frame-src 'none'",
+    "img-src 'self' data:",
     "object-src 'none'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDevelopment ? " 'unsafe-eval'" : ''}`,
     "style-src 'self' 'unsafe-inline'",
@@ -51,17 +58,16 @@ export default function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Every path except build assets, the image optimizer and the image files in public/ —
-     * none of them execute scripts, and running the proxy on them only adds latency. Prefetch
-     * requests are excluded too: they are served from the router cache, so a nonce
-     * minted for one would never match the document that eventually renders.
+     * Every HTML route except API endpoints, crawler/text files, build assets, the image
+     * optimizer and static files in public/ — none of them execute HTML scripts, and
+     * minting nonces on them only adds latency. Only Next.js internal router prefetches
+     * (`next-router-prefetch`) are skipped; browser full-document prefetches (`Purpose:
+     * prefetch` / Speculation Rules) still receive a full nonced CSP header.
      */
     {
-      source: '/((?!_next/static|_next/image|.*\\.(?:png|jpg|webp)$).*)',
-      missing: [
-        { type: 'header', key: 'next-router-prefetch' },
-        { type: 'header', key: 'purpose', value: 'prefetch' },
-      ],
+      source:
+        '/((?!api/|_next/static|_next/image|robots\\.txt|sitemap\\.xml|llms\\.txt|favicon\\.ico|.*\\.(?:png|jpg|jpeg|webp|svg|ico|txt|xml)$).*)',
+      missing: [{ type: 'header', key: 'next-router-prefetch' }],
     },
   ],
 };

@@ -1,188 +1,357 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  computeClockOffset,
+  formatAsOfTimestamp,
+  formatMarketCap,
+  formatUsd,
+  formatWholeBtc,
+  issuedSupplyAtHeight,
+  isValidBlockHeight,
+  isValidCirculatingSupply,
+  isValidPriceUpdatedAt,
+  isValidPriceUsd,
+  PRICE_STALE_SECONDS,
+  SUPPLY_STALE_SECONDS,
+} from '@/lib/bitcoin';
 
-function issuedSupplyAtHeight(height: number) {
-  let totalSats = 0;
-  let eraStart = 0;
+const POLL_INTERVAL_MS = 60_000;
+const CLOCK_TICK_MS = 30_000;
+const REQUEST_TIMEOUT_MS = 10_000;
+// Preserve last good "Live" state across a single transient blip while timestamps
+// remain inside their freshness window; drop early only after 2 consecutive failures.
+const FAILURE_THRESHOLD = 2;
 
-  for (let era = 0; era < 64 && eraStart <= height; era += 1) {
-    const subsidySats = Math.floor(5_000_000_000 / 2 ** era);
-    if (subsidySats === 0) break;
+export type MarketState = {
+  blockHeight: number | null;
+  circulatingSupply: number | null;
+  priceUsd: number | null;
+  priceUpdatedAt: number | null;
+  fetchedAt: number | null;
+  // Server clock minus this browser's clock, derived from HTTP Date + Age headers.
+  clockOffset: number;
+  now: number;
+  hasAttemptedUpdate: boolean;
+  consecutivePriceFailures: number;
+  consecutiveSupplyFailures: number;
+};
 
-    const blocksInEra = Math.min(height - eraStart + 1, 210_000);
-    totalSats += blocksInEra * subsidySats;
-    eraStart += 210_000;
+export const INITIAL_MARKET_STATE: MarketState = {
+  blockHeight: null,
+  circulatingSupply: null,
+  priceUsd: null,
+  priceUpdatedAt: null,
+  fetchedAt: null,
+  clockOffset: 0,
+  now: 0,
+  hasAttemptedUpdate: false,
+  consecutivePriceFailures: 0,
+  consecutiveSupplyFailures: 0,
+};
+
+export type MarketView = {
+  supplyBtc: number | null;
+  marketCapUsd: number | null;
+  isPriceLive: boolean;
+  isSupplyLive: boolean;
+  isMarketLive: boolean;
+  priceStatus: string;
+  supplyStatus: string;
+  marketStatus: string;
+  serverNow: number;
+};
+
+export function computeMarketView(state: MarketState): MarketView {
+  const serverNow = state.now + state.clockOffset;
+  const priceFailedOut = state.consecutivePriceFailures >= FAILURE_THRESHOLD;
+  const supplyFailedOut = state.consecutiveSupplyFailures >= FAILURE_THRESHOLD;
+
+  const isPriceLive =
+    !priceFailedOut
+    && state.priceUpdatedAt !== null
+    && serverNow - state.priceUpdatedAt <= PRICE_STALE_SECONDS;
+  const isSupplyLive =
+    !supplyFailedOut
+    && state.fetchedAt !== null
+    && serverNow - state.fetchedAt <= SUPPLY_STALE_SECONDS;
+  const isMarketLive = isPriceLive && isSupplyLive;
+
+  const supplyBtc = state.circulatingSupply !== null
+    ? state.circulatingSupply
+    : state.blockHeight !== null
+      ? issuedSupplyAtHeight(state.blockHeight)
+      : null;
+
+  const marketCapUsd =
+    state.priceUsd === null || supplyBtc === null
+      ? null
+      : state.priceUsd * supplyBtc;
+
+  const priceStatus = isPriceLive
+    ? 'Live price'
+    : state.priceUsd !== null
+      ? 'Last known'
+      : state.hasAttemptedUpdate
+        ? 'Unavailable'
+        : 'Loading';
+
+  const supplyStatus = isSupplyLive
+    ? 'Live network'
+    : supplyBtc !== null
+      ? 'Last known'
+      : state.hasAttemptedUpdate
+        ? 'Unavailable'
+        : 'Loading';
+
+  const marketStatus = isMarketLive
+    ? 'Live market'
+    : marketCapUsd !== null
+      ? 'Last known'
+      : state.hasAttemptedUpdate
+        ? 'Unavailable'
+        : 'Loading';
+
+  return {
+    supplyBtc,
+    marketCapUsd,
+    isPriceLive,
+    isSupplyLive,
+    isMarketLive,
+    priceStatus,
+    supplyStatus,
+    marketStatus,
+    serverNow,
+  };
+}
+
+export function applyMarketPayload(
+  prev: MarketState,
+  data: Record<string, unknown>,
+  headers: Pick<Headers, 'get'>,
+  receivedAtSeconds: number,
+): MarketState {
+  const fetchedAt = data.fetchedAt;
+  if (typeof fetchedAt !== 'number' || !Number.isInteger(fetchedAt) || fetchedAt <= 0) {
+    throw new Error('Invalid Bitcoin market timestamp');
   }
 
-  return totalSats / 100_000_000;
+  const hasValidPrice =
+    isValidPriceUsd(data.priceUsd) && isValidPriceUpdatedAt(data.priceUpdatedAt, fetchedAt);
+  const hasValidHeight = isValidBlockHeight(data.blockHeight);
+  const hasValidSupply = isValidCirculatingSupply(data.circulatingSupply);
+  const hasSupplyReading = hasValidSupply || hasValidHeight;
+
+  if (!hasValidPrice && !hasSupplyReading) {
+    throw new Error('Invalid Bitcoin market data');
+  }
+
+  const nextClockOffset = computeClockOffset(headers, fetchedAt, receivedAtSeconds);
+  const nextBlockHeight = hasValidHeight ? (data.blockHeight as number) : prev.blockHeight;
+  const nextSupply = hasValidSupply
+    ? (data.circulatingSupply as number)
+    : hasValidHeight
+      ? issuedSupplyAtHeight(data.blockHeight as number)
+      : prev.circulatingSupply;
+
+  return {
+    blockHeight: nextBlockHeight,
+    circulatingSupply: nextSupply,
+    priceUsd: hasValidPrice ? (data.priceUsd as number) : prev.priceUsd,
+    priceUpdatedAt: hasValidPrice ? (data.priceUpdatedAt as number) : prev.priceUpdatedAt,
+    fetchedAt: hasSupplyReading ? fetchedAt : prev.fetchedAt,
+    clockOffset: nextClockOffset,
+    now: receivedAtSeconds,
+    hasAttemptedUpdate: true,
+    consecutivePriceFailures: hasValidPrice ? 0 : prev.consecutivePriceFailures + 1,
+    consecutiveSupplyFailures: hasSupplyReading ? 0 : prev.consecutiveSupplyFailures + 1,
+  };
 }
 
-function formatWholeNumber(value: number) {
-  return value.toLocaleString('en-US', {
-    maximumFractionDigits: 0,
-  });
+export function applyMarketFailure(prev: MarketState, nowSeconds: number): MarketState {
+  return {
+    ...prev,
+    now: nowSeconds,
+    hasAttemptedUpdate: true,
+    consecutivePriceFailures: prev.consecutivePriceFailures + 1,
+    consecutiveSupplyFailures: prev.consecutiveSupplyFailures + 1,
+  };
 }
 
-function formatUsd(value: number | null) {
-  if (value === null) return '—';
-
-  return value.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  });
+function isPageVisible(): boolean {
+  return typeof document === 'undefined' || document.visibilityState === 'visible';
 }
 
 export default function SupplyHeroModule() {
-  const [blockHeight, setBlockHeight] = useState<number | null>(null);
-  const [priceUsd, setPriceUsd] = useState<number | null>(null);
-  const [priceUpdatedAt, setPriceUpdatedAt] = useState<number | null>(null);
-  const [fetchedAt, setFetchedAt] = useState<number | null>(null);
-  // Server clock minus this browser's clock, measured when each response arrives.
-  const [clockOffset, setClockOffset] = useState(0);
-  const [now, setNow] = useState(0);
-  const [hasAttemptedUpdate, setHasAttemptedUpdate] = useState(false);
-  const [requestFailed, setRequestFailed] = useState(false);
+  const [market, setMarket] = useState<MarketState>(INITIAL_MARKET_STATE);
 
   useEffect(() => {
     let disposed = false;
-    let refresh: ReturnType<typeof setTimeout>;
+    let refreshTimer: ReturnType<typeof setTimeout> | undefined;
+    let clockTimer: number | undefined;
     let controller: AbortController | undefined;
-    const clock = window.setInterval(() => setNow(Date.now() / 1000), 30_000);
+    let inFlight = false;
+    let lastAttemptMs = 0;
+
+    function clearTimers() {
+      if (refreshTimer !== undefined) {
+        clearTimeout(refreshTimer);
+        refreshTimer = undefined;
+      }
+      if (clockTimer !== undefined) {
+        window.clearInterval(clockTimer);
+        clockTimer = undefined;
+      }
+    }
+
+    function startClock() {
+      if (clockTimer !== undefined || !isPageVisible()) return;
+      clockTimer = window.setInterval(() => {
+        if (!disposed && isPageVisible()) {
+          setMarket((prev) => ({ ...prev, now: Date.now() / 1000 }));
+        }
+      }, CLOCK_TICK_MS);
+    }
+
+    function scheduleNextRefresh(delayMs = POLL_INTERVAL_MS) {
+      if (disposed || !isPageVisible()) return;
+      if (refreshTimer !== undefined) clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => {
+        refreshTimer = undefined;
+        void refreshMarketData();
+      }, delayMs);
+    }
 
     async function refreshMarketData() {
+      if (disposed || inFlight || !isPageVisible()) return;
+      inFlight = true;
+      lastAttemptMs = Date.now();
       controller = new AbortController();
       const signal = controller.signal;
-      const deadline = window.setTimeout(() => controller?.abort(), 10_000);
+      const deadline = window.setTimeout(() => controller?.abort(), REQUEST_TIMEOUT_MS);
+
       try {
         const response = await fetch('/api/bitcoin', { cache: 'no-store', signal });
         if (!response.ok) throw new Error('Bitcoin market data is unavailable');
-        const data = await response.json();
+        const data = (await response.json()) as Record<string, unknown>;
         const receivedAt = Date.now() / 1000;
-        if (!Number.isInteger(data.blockHeight) || data.blockHeight <= 0
-            || !Number.isFinite(data.priceUsd) || data.priceUsd <= 0
-            || !Number.isInteger(data.priceUpdatedAt) || data.priceUpdatedAt <= 0
-            || !Number.isInteger(data.fetchedAt) || data.fetchedAt <= 0
-            || data.priceUpdatedAt > data.fetchedAt + 60) {
-          throw new Error('Invalid Bitcoin market data');
-        }
         if (disposed) return;
         if (signal.aborted) throw new Error('Bitcoin market data request timed out');
-        setBlockHeight(data.blockHeight);
-        setPriceUsd(data.priceUsd);
-        setPriceUpdatedAt(data.priceUpdatedAt);
-        setFetchedAt(data.fetchedAt);
-        setClockOffset(data.fetchedAt - receivedAt);
-        setRequestFailed(false);
+        setMarket((prev) => applyMarketPayload(prev, data, response.headers, receivedAt));
       } catch {
-        if (!disposed) setRequestFailed(true);
-      } finally {
-        window.clearTimeout(deadline);
         if (!disposed) {
-          setNow(Date.now() / 1000);
-          setHasAttemptedUpdate(true);
+          const nowSeconds = Date.now() / 1000;
+          setMarket((prev) => applyMarketFailure(prev, nowSeconds));
+        }
+      } finally {
+        inFlight = false;
+        window.clearTimeout(deadline);
+        if (!disposed && isPageVisible()) {
           // Schedule after completion so slow responses cannot overlap newer requests.
-          refresh = setTimeout(() => { void refreshMarketData(); }, 60_000);
+          scheduleNextRefresh(POLL_INTERVAL_MS);
         }
       }
     }
 
-    void refreshMarketData();
+    function handleVisibilityChange() {
+      if (disposed) return;
+      if (!isPageVisible()) {
+        clearTimers();
+        return;
+      }
+      setMarket((prev) => ({ ...prev, now: Date.now() / 1000 }));
+      startClock();
+      const elapsed = Date.now() - lastAttemptMs;
+      if (!inFlight && (lastAttemptMs === 0 || elapsed >= POLL_INTERVAL_MS)) {
+        void refreshMarketData();
+      } else if (!inFlight) {
+        scheduleNextRefresh(Math.max(1_000, POLL_INTERVAL_MS - elapsed));
+      }
+    }
+
+    if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
+
+    if (isPageVisible()) {
+      startClock();
+      void refreshMarketData();
+    }
+
     return () => {
       disposed = true;
       controller?.abort();
-      clearTimeout(refresh);
-      window.clearInterval(clock);
+      clearTimers();
+      if (typeof document !== 'undefined' && typeof document.removeEventListener === 'function') {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }
     };
   }, []);
 
-  // Prices update less often than our network-height requests. Expire both labels
-  // even when the connection fails or no further response arrives. Ages are measured
-  // on the server's clock, so a visitor whose clock is wrong still sees the right label.
-  // Any shared-cache age of the response is bounded by the route's Cache-Control.
-  const serverNow = now + clockOffset;
-  const isPriceLive = !requestFailed && priceUpdatedAt !== null && serverNow - priceUpdatedAt <= 15 * 60;
-  const isSupplyLive = !requestFailed && fetchedAt !== null && serverNow - fetchedAt <= 5 * 60;
-
-  const issued = useMemo(
-    () => (blockHeight === null ? null : issuedSupplyAtHeight(blockHeight)),
-    [blockHeight],
-  );
-  const marketCapTrillions = priceUsd === null || issued === null
-    ? null
-    : (priceUsd * issued) / 1_000_000_000_000;
-  const priceStatus = isPriceLive
-    ? 'Live price'
-    : priceUsd !== null
-      ? 'Last known'
-      : hasAttemptedUpdate
-        ? 'Unavailable'
-        : 'Loading';
-  const supplyStatus = isSupplyLive
-    ? 'Live network'
-    : issued !== null
-      ? 'Last known'
-      : hasAttemptedUpdate
-        ? 'Unavailable'
-        : 'Loading';
-  const marketStatus = isPriceLive && isSupplyLive
-    ? 'Live market'
-    : marketCapTrillions !== null
-      ? 'Last known'
-      : hasAttemptedUpdate
-        ? 'Unavailable'
-        : 'Loading';
+  const view = computeMarketView(market);
 
   return (
     <aside
       className="hero-supply-module"
-      aria-busy={!hasAttemptedUpdate}
+      aria-busy={!market.hasAttemptedUpdate}
       aria-label="Bitcoin market and supply data"
     >
       <div className="metric-module-group">
         <div className="metric-module-head">
-          <span><i aria-hidden="true" className={isPriceLive ? 'network-live' : ''} /> Bitcoin price</span>
-          <b>{priceStatus}</b>
+          <span><i aria-hidden="true" className={view.isPriceLive ? 'network-live' : ''} /> Bitcoin price</span>
+          <b>{view.priceStatus}</b>
         </div>
         <div className="metric-module-number" aria-live="polite">
-          <strong>{formatUsd(priceUsd)}</strong>
+          <strong>{formatUsd(market.priceUsd)}</strong>
           <small>USD</small>
         </div>
       </div>
       <div className="metric-module-group">
         <div className="metric-module-head">
-          <span><i aria-hidden="true" className={isSupplyLive ? 'network-live' : ''} /> Bitcoin supply</span>
-          <b>{supplyStatus}</b>
+          <span><i aria-hidden="true" className={view.isSupplyLive ? 'network-live' : ''} /> Bitcoin supply</span>
+          <b>{view.supplyStatus}</b>
         </div>
         <div className="metric-module-number" aria-live="polite">
-          <strong>{issued === null ? '—' : formatWholeNumber(issued)}</strong>
+          <strong>{view.supplyBtc === null ? '—' : formatWholeBtc(view.supplyBtc)}</strong>
         </div>
       </div>
       <div className="metric-module-group">
         <div className="metric-module-head">
-          <span><i aria-hidden="true" className={isPriceLive && isSupplyLive ? 'network-live' : ''} /> Market cap</span>
-          <b>{marketStatus}</b>
+          <span><i aria-hidden="true" className={view.isMarketLive ? 'network-live' : ''} /> Market cap</span>
+          <b>{view.marketStatus}</b>
         </div>
         <div className="metric-module-number" aria-live="polite">
-          <strong>{marketCapTrillions === null ? '—' : `$${marketCapTrillions.toFixed(2)} Trillion`}</strong>
+          <strong>{formatMarketCap(view.marketCapUsd)}</strong>
           <small>USD</small>
         </div>
       </div>
-      {priceUpdatedAt !== null && (
+      {market.priceUpdatedAt !== null && (
         <small className="market-asof">
           As of{' '}
           <time
-            dateTime={new Date(priceUpdatedAt * 1000).toISOString()}
-            title={new Date(priceUpdatedAt * 1000).toLocaleString()}
+            dateTime={new Date(market.priceUpdatedAt * 1000).toISOString()}
+            title={new Date(market.priceUpdatedAt * 1000).toLocaleString()}
           >
-            {new Date(priceUpdatedAt * 1000).toLocaleTimeString(undefined, {
-              hour: 'numeric',
-              minute: '2-digit',
-            })}
+            {formatAsOfTimestamp(market.priceUpdatedAt, view.serverNow)}
           </time>
         </small>
       )}
+      <div className="metric-module-links">
+        <a
+          href="https://dashboard.secretsatoshis.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Market Dashboard <span aria-hidden="true">↗</span>
+        </a>
+        <a
+          href="https://charts.secretsatoshis.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Charts <span aria-hidden="true">↗</span>
+        </a>
+      </div>
     </aside>
   );
 }
