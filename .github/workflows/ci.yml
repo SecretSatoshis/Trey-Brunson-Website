@@ -25,7 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Node.js and pnpm
-        uses: SecretSatoshis/.github/actions/setup-node-pnpm@deb19758624b41175b649a18223ee978bab34bcc
+        uses: SecretSatoshis/.github/actions/setup-node-pnpm@fa7689c8d18470d704eaef69c3881611a58d4656
         with:
           node-version-file: .nvmrc
           pnpm-version: "11.19.0"
