@@ -4,9 +4,10 @@
 > created Secret Satoshis: a Bitcoin newsletter, the Bitcoin-native AI agent Agent 21, and
 > the open data and code behind them.
 
-Trey got into Bitcoin at the University of Delaware. His career spans advisory, crypto
-exchanges, institutional Bitcoin products, and crypto venture funds at Blockchain.com,
-Grant Thornton, Binance.US, 21Shares, and Tribe Capital. He is based in New York.
+Trey got into Bitcoin at the University of Delaware. He leads crypto operations for
+Tribe Capital’s venture capital funds. His previous roles at Blockchain.com, Grant
+Thornton, Binance.US, and 21Shares span management consulting, exchange operations,
+and institutional Bitcoin products. He is based in New York.
 
 This site is a single page. Its live Bitcoin price, UTXO circulating supply, and market
 cap are fetched primarily from BRK (bitview.space) with automatic failover to the public
@@ -27,11 +28,11 @@ other live surfaces. Check the Secret Satoshis sources below for dated research 
 - [Chart Library](https://charts.secretsatoshis.com/): interactive charts covering price, ETF flows, on-chain activity, supply, mining, and valuation.
 - [Open-source code](https://github.com/SecretSatoshis): the data, notebooks, charts and models behind the analysis.
 
-## Flagship essays
+## Featured articles
 
 - [2026 Bitcoin Price Outlook](https://newsletter.secretsatoshis.com/p/bitcoin-2026-price-outlook): bear, base, and bull year-end Bitcoin price scenarios tracked in public all year.
+- [Bitcoin Adoption Thesis](https://newsletter.secretsatoshis.com/p/bitcoin-ahead-of-the-curve): how Bitcoin is gaining adoption as an internet-native network and a form of global money.
 - [Should I buy bitcoin?](https://newsletter.secretsatoshis.com/p/should-i-buy-bitcoin): a data-driven case study testing a long-term Bitcoin savings plan across real price history.
-- [Weekly Bitcoin Recap](https://newsletter.secretsatoshis.com/t/weekly-bitcoin-recap): every Monday's key Bitcoin stories, market numbers, and outlook tracking.
 
 ## Guides for agents
 

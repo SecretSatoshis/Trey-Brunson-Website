@@ -31,7 +31,7 @@ const ventures = [
   },
 ];
 
-const flagshipEssays = [
+const featuredArticles = [
   {
     category: 'Annual Outlook',
     title: '2026 Bitcoin Price Outlook',
@@ -39,16 +39,16 @@ const flagshipEssays = [
     href: 'https://newsletter.secretsatoshis.com/p/bitcoin-2026-price-outlook',
   },
   {
+    category: 'Long-Term Research',
+    title: 'Bitcoin Adoption Thesis',
+    summary: 'How Bitcoin is gaining adoption as an internet-native network and a form of global money.',
+    href: 'https://newsletter.secretsatoshis.com/p/bitcoin-ahead-of-the-curve',
+  },
+  {
     category: 'Investment Strategy',
     title: 'Should I buy bitcoin?',
     summary: 'A data-driven study testing a long-term Bitcoin savings plan across real price history.',
     href: 'https://newsletter.secretsatoshis.com/p/should-i-buy-bitcoin',
-  },
-  {
-    category: 'Weekly Analysis',
-    title: 'Weekly Bitcoin Recap',
-    summary: 'Every Monday: last week\u2019s key stories, market numbers, and where price sits against the outlook.',
-    href: 'https://newsletter.secretsatoshis.com/t/weekly-bitcoin-recap',
   },
 ];
 
@@ -78,7 +78,7 @@ export default function Home() {
               Focused on <em>Bitcoin</em> and its growing role in finance since 2016.
             </h1>
             <div className="hero-bottom reveal-item">
-              <p>Trey Brunson is a Bitcoin industry professional with a decade of experience working across crypto exchanges, Bitcoin financial products, and crypto venture funds.</p>
+              <p>Trey Brunson has a decade of experience in Bitcoin across crypto exchanges, institutional Bitcoin products, and venture fund operations.</p>
               <div className="hero-actions">
                 <a className="button button-primary" href="#work">Explore the work <span aria-hidden="true">↓</span></a>
                 <a className="button button-secondary" href="#about">About Trey</a>
@@ -98,7 +98,7 @@ export default function Home() {
           <div className="section-label light-label"><span>01</span>Selected work</div>
           <div className="work-intro">
             <h2>Platforms &amp; projects</h2>
-            <p>Explore the research and tools behind Secret Satoshis—from the newsletter and Agent 21 to the open-source code behind them.</p>
+            <p>Trey has built a Bitcoin research publication, an AI analyst, and open-source tools for following the market.</p>
           </div>
           <div className="venture-list">
             {ventures.map((venture) => (
@@ -113,15 +113,15 @@ export default function Home() {
           <div className="essays-block" aria-labelledby="selected-research-heading">
             <div className="essays-head">
               <p className="eyebrow">Selected research</p>
-              <h3 id="selected-research-heading">Flagship essays</h3>
+              <h3 id="selected-research-heading">Featured articles</h3>
             </div>
             <div className="essay-list">
-              {flagshipEssays.map((essay) => (
-                <a className="essay-card" href={essay.href} target="_blank" rel="noopener noreferrer" key={essay.href}>
-                  <p className="essay-category">{essay.category}</p>
-                  <h4>{essay.title}</h4>
-                  <p className="essay-summary">{essay.summary}</p>
-                  <span className="essay-link">Read piece <b aria-hidden="true">↗</b></span>
+              {featuredArticles.map((article) => (
+                <a className="essay-card" href={article.href} target="_blank" rel="noopener noreferrer" key={article.href}>
+                  <p className="essay-category">{article.category}</p>
+                  <h4>{article.title}</h4>
+                  <p className="essay-summary">{article.summary}</p>
+                  <span className="essay-link">Read article <b aria-hidden="true">↗</b></span>
                 </a>
               ))}
             </div>
@@ -137,10 +137,9 @@ export default function Home() {
             </figure>
             <div className="about-copy">
               <p className="eyebrow">About Trey</p>
-              <h2>A decade working across the Bitcoin industry.</h2>
-              <p className="about-lead">Trey got into Bitcoin in college. What started as curiosity at the University of Delaware grew into a decade-long career spanning crypto exchanges, Bitcoin financial products, and crypto venture funds.</p>
-              <p>Along the way, he has worked across advisory, exchange operations, institutional Bitcoin products, and crypto venture investing at Blockchain.com, Grant Thornton, Binance.US, 21Shares, and Tribe Capital.</p>
-              <p>Today, Trey brings that experience to <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a>, where he shares Bitcoin research, open data, and AI tools. The aim is to help friends, family, and other curious readers make sense of Bitcoin and form their own informed views.</p>
+              <h2>A decade working in Bitcoin.</h2>
+              <p className="about-lead">Trey got into Bitcoin in 2016 while studying at the University of Delaware. Over the next decade, he worked in management consulting, crypto exchange operations, and institutional Bitcoin products, with roles at Blockchain.com, Grant Thornton, Binance.US, and 21Shares. He now leads crypto operations for Tribe Capital’s venture capital funds.</p>
+              <p>Trey founded <a className="inline-link" href="https://secretsatoshis.com/" target="_blank" rel="noopener noreferrer">Secret Satoshis</a> to help friends and family make sense of Bitcoin. He publishes a price outlook each January and tracks it publicly in his Monday recaps. He shares the data and tools behind the research so readers can explore it and draw their own conclusions.</p>
               <a className="text-link" href="https://www.linkedin.com/in/trey-brunson" target="_blank" rel="noopener noreferrer">View LinkedIn <span aria-hidden="true">↗</span></a>
             </div>
           </div>

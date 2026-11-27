@@ -1,9 +1,9 @@
 # TreyBrunson.com
 
 The personal site of [Trey Brunson](https://treybrunson.com/), focused on Bitcoin since 2016
-and a decade working across advisory, crypto exchanges, institutional Bitcoin products, and
-crypto venture funds. It introduces Trey, his Secret Satoshis platforms (the newsletter,
-Agent 21, and open-source code), flagship essays, and live Bitcoin price, supply, and market
+and a decade working across management consulting, crypto exchanges, institutional Bitcoin
+products, and venture fund operations. It introduces Trey, his Secret Satoshis platforms (the newsletter,
+Agent 21, and open-source code), featured articles, and live Bitcoin price, supply, and market
 cap linked to the Secret Satoshis Market Dashboard and Chart Library.
 
 - **Visit the site:** [treybrunson.com](https://treybrunson.com/)
